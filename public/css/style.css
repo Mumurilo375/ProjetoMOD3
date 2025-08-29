@@ -68,18 +68,19 @@ a:hover { filter: brightness(1.1); }
 .hero p { color: hsl(var(--muted-foreground)); margin: 0 0 24px; }
 
 /* Search */
-.search { display: grid; grid-template-columns: 140px 1fr auto; gap: 10px; }
-.search select, .search input { height: 48px; border-radius: 12px; border: 1px solid hsl(var(--border)); background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 0 12px; }
+.search { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.search select, .search input { height: 44px; border-radius: 12px; border: 1px solid hsl(var(--border)); background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 0 12px; }
 .search input::placeholder { color: hsl(var(--muted-foreground)); }
-.search button { height: 48px; }
+.search button { height: 44px; padding: 8px 12px; }
+.search .btn { padding: 8px 12px; }
 
 /* Reels */
 .reels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; height: 520px; overflow: hidden; }
 .reel { display: grid; gap: 12px; }
 .reel > img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; border: 1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
-.reel.anim1 { animation: scrollY 18s linear infinite; }
-.reel.anim2 { animation: scrollY 22s linear infinite reverse; }
-.reel.anim3 { animation: scrollY 26s linear infinite; }
+.reel.anim1 { animation: scrollY 20s linear infinite; }
+.reel.anim2 { animation: scrollY 24s linear infinite reverse; }
+.reel.anim3 { animation: scrollY 28s linear infinite; }
 .reel:hover { animation-play-state: paused; }
 @keyframes scrollY { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 

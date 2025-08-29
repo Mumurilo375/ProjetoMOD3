@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AvaliaFlix — Avaliação de Filmes e Séries</title>
-  <meta name="description" content="Avalie filmes, séries e celebridades. Descubra tendências e compartilhe opiniões." />
+  <meta name="description" content="Avalie filmes. Descubra tendências e compartilhe opiniões." />
   <link rel="canonical" href="/static/index.html" />
   <meta name="robots" content="index,follow" />
   <link rel="stylesheet" href="css/style.css" />
@@ -12,11 +12,11 @@
 <body data-page="landing">
   <header class="site-header">
     <div class="inner container">
-      <div class="brand"><a href="/static/index.html" aria-label="AvaliaFlix, recarregar">AvaliaFlix</a></div>
+  <div class="brand"><a href="/static/index.html" aria-label="Home"><img src="img/LogoStarRate.png" alt="Logo StarRate" style="height:36px; display:block;"/></a></div>
+      
       <nav class="nav">
         <a href="/static/movies.html">Filmes</a>
-        <a href="/static/series.html">Séries</a>
-        <a href="/static/celebrities.html">Celebridades</a>
+        <a href="/static/series.html">Lançamentos</a>
       </nav>
       <div class="nav">
         <a class="btn btn-ghost" href="#">Login</a>
@@ -30,14 +30,8 @@
       <section>
         <h1>Descubra, avalie e compartilhe sua paixão por cinema e séries</h1>
         <p>Notas em estrelas, comentários e tendências em um só lugar. Comece agora.</p>
-        <form class="search js-search-form" aria-label="Buscar títulos">
-          <select name="c" aria-label="Categoria">
-            <option value="todos">Todos</option>
-            <option value="filmes">Filmes</option>
-            <option value="series">Séries</option>
-            <option value="celebridades">Celebridades</option>
-          </select>
-          <input name="q" type="search" placeholder="Busque por títulos, séries ou celebridades" aria-label="Pesquisar" />
+        <form class="search js-search-form" aria-label="Buscar filmes">
+          <input name="q" type="search" placeholder="Busque por títulos de filmes" aria-label="Pesquisar filmes" />
           <button class="btn btn-primary" type="submit">Buscar</button>
         </form>
       </section>
@@ -87,7 +81,7 @@
       <div class="container grid cols-3">
         <div class="card"><h3 style="margin:0 0 6px;">Avaliações confiáveis</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Atribua notas em estrelas e comentários que ajudam a comunidade a decidir o que assistir.</p></div>
         <div class="card"><h3 style="margin:0 0 6px;">Listas e favoritos</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Organize sua experiência com listas personalizadas e favoritos.</p></div>
-        <div class="card"><h3 style="margin:0 0 6px;">Exploração inteligente</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Use filtros por filmes, séries e celebridades para encontrar o que importa pra você.</p></div>
+  <div class="card"><h3 style="margin:0 0 6px;">Exploração inteligente</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Use a busca para encontrar filmes que importam pra você.</p></div>
       </div>
     </section>
   </main>
