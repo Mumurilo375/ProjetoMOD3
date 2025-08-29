@@ -37,28 +37,34 @@
       </section>
       <aside aria-label="Carrosséis de pôsteres" class="reels">
         <div class="reel anim1">
-          <img src="/static/posters/poster1.jpg" alt="Pôster em destaque 1" loading="lazy" />
-          <img src="/static/posters/poster2.jpg" alt="Pôster em destaque 2" loading="lazy" />
-          <img src="/static/posters/poster3.jpg" alt="Pôster em destaque 3" loading="lazy" />
-          <img src="/static/posters/poster4.jpg" alt="Pôster em destaque 4" loading="lazy" />
-          <img src="/static/posters/poster1.jpg" alt="Pôster em destaque 1 (loop)" loading="lazy" />
-          <img src="/static/posters/poster2.jpg" alt="Pôster em destaque 2 (loop)" loading="lazy" />
+          <img src="img/10coisasQueOdeioEmVoce.webp" alt="Pôster em destaque 1" loading="lazy" />
+          <img src="img/f1.webp" alt="Pôster em destaque 2" loading="lazy" />
+          <img src="img/itACoisa.jpg" alt="Pôster em destaque 3" loading="lazy" />
+          <img src="img/interestelar.jpg" alt="Pôster em destaque 4" loading="lazy" />
+          <img src="img/10coisasQueOdeioEmVoce.webp" alt="Pôster em destaque 1 (loop)" loading="lazy" />
+          <img src="img/f1.webp" alt="Pôster em destaque 2 (loop)" loading="lazy" />
+          <img src="img/itACoisa.jpg" alt="Pôster em destaque 3 (loop)" loading="lazy" />
+          <img src="img/interestelar.jpg" alt="Pôster em destaque 4 (loop)" loading="lazy" />
         </div>
         <div class="reel anim2">
-          <img src="/static/posters/poster5.jpg" alt="Pôster em destaque 5" loading="lazy" />
-          <img src="/static/posters/poster6.jpg" alt="Pôster em destaque 6" loading="lazy" />
-          <img src="/static/posters/poster7.jpg" alt="Pôster em destaque 7" loading="lazy" />
-          <img src="/static/posters/poster8.jpg" alt="Pôster em destaque 8" loading="lazy" />
-          <img src="/static/posters/poster5.jpg" alt="Pôster em destaque 5 (loop)" loading="lazy" />
-          <img src="/static/posters/poster6.jpg" alt="Pôster em destaque 6 (loop)" loading="lazy" />
+          <img src="img/weapons.jpg" alt="Pôster em destaque 5" loading="lazy" />
+          <img src="img/donnieDarko.jpg" alt="Pôster em destaque 6" loading="lazy" />
+          <img src="img/drive.jpg.crdownload" alt="Pôster em destaque 7" loading="lazy" />
+          <img src="img/joker.png" alt="Pôster em destaque 8" loading="lazy" />
+          <img src="img/weapons.jpg" alt="Pôster em destaque 5 (loop)" loading="lazy" />
+          <img src="img/donnieDarko.jpg" alt="Pôster em destaque 6 (loop)" loading="lazy" />
+          <img src="img/drive.jpg.crdownload" alt="Pôster em destaque 7 (loop)" loading="lazy" />
+          <img src="img/joker.png" alt="Pôster em destaque 8 (loop)" loading="lazy" />
         </div>
         <div class="reel anim3">
-          <img src="/static/posters/poster9.jpg" alt="Pôster em destaque 9" loading="lazy" />
-          <img src="/static/posters/poster10.jpg" alt="Pôster em destaque 10" loading="lazy" />
-          <img src="/static/posters/poster11.jpg" alt="Pôster em destaque 11" loading="lazy" />
-          <img src="/static/posters/poster12.jpg" alt="Pôster em destaque 12" loading="lazy" />
-          <img src="/static/posters/poster9.jpg" alt="Pôster em destaque 9 (loop)" loading="lazy" />
-          <img src="/static/posters/poster10.jpg" alt="Pôster em destaque 10 (loop)" loading="lazy" />
+          <img src="img/whiplash.webp" alt="Pôster em destaque 9" loading="lazy" />
+          <img src="img/28years.webp" alt="Pôster em destaque 10" loading="lazy" />
+          <img src="img/invocaçãoDoMal4.jpg" alt="Pôster em destaque 11" loading="lazy" />
+          <img src="img/premonição.jpg" alt="Pôster em destaque 12" loading="lazy" />
+          <img src="img/whiplash.webp" alt="Pôster em destaque 9 (loop)" loading="lazy" />
+          <img src="img/28years.webp" alt="Pôster em destaque 10 (loop)" loading="lazy" />
+          <img src="img/invocaçãoDoMal4.jpg" alt="Pôster em destaque 11 (loop)" loading="lazy" />
+          <img src="img/premonição.jpg" alt="Pôster em destaque 12 (loop)" loading="lazy" />
         </div>
       </aside>
     </div>
