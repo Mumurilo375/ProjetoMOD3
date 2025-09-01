@@ -1,20 +1,21 @@
 <?php
 
-use App\Model\User;
+use App\Model\User; //importando a classe User do namespace App\Model, para usar a classe User, que está definida em src/Model/User.php, sem isso, o código não funcionaria, pois a classe User não estaria disponível no escopo deste arquivo
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-if ($_POST) {
+//esse if verifica se o formulário foi submetido, ou seja, se há dados enviados via método POST, para então criar um novo usuário e salvá-lo no banco de dados
+if ($_POST) { 
     $user = new User(
         name: $_POST['user_name'],
         email: $_POST['user_email'],
         password: $_POST['user_password']
     );
     
-    $user->save();
+    $user->save(); //essa linha chama o método save() da classe User para salvar o novo usuário no banco de dados
 }
 
-$users = User::findAll();
+$users = User::findAll(); //essa linha chama o método estático findAll() da classe User para buscar todos os usuários no banco de dados e armazená-los na variável $users, que será usada para exibir a lista de usuários na tabela abaixo
 
 ?>
 

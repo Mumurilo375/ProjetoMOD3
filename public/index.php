@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AvaliaFlix — Avaliação de Filmes e Séries</title>
+  <title>StarRate — Avaliação de Filmes e Séries</title>
   <meta name="description" content="Avalie filmes. Descubra tendências e compartilhe opiniões." />
   <link rel="canonical" href="/static/index.html" />
   <meta name="robots" content="index,follow" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 <body data-page="landing">
   <header class="site-header">
@@ -49,11 +50,11 @@
         <div class="reel anim2">
           <img src="img/weapons.jpg" alt="Pôster em destaque 5" loading="lazy" />
           <img src="img/donnieDarko.jpg" alt="Pôster em destaque 6" loading="lazy" />
-          <img src="img/drive.jpg.crdownload" alt="Pôster em destaque 7" loading="lazy" />
+          <img src="img/drive.jpg" alt="Pôster em destaque 7" loading="lazy" />
           <img src="img/joker.png" alt="Pôster em destaque 8" loading="lazy" />
           <img src="img/weapons.jpg" alt="Pôster em destaque 5 (loop)" loading="lazy" />
           <img src="img/donnieDarko.jpg" alt="Pôster em destaque 6 (loop)" loading="lazy" />
-          <img src="img/drive.jpg.crdownload" alt="Pôster em destaque 7 (loop)" loading="lazy" />
+          <img src="img/drive.jpg" alt="Pôster em destaque 7 (loop)" loading="lazy" />
           <img src="img/joker.png" alt="Pôster em destaque 8 (loop)" loading="lazy" />
         </div>
         <div class="reel anim3">

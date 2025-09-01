@@ -62,7 +62,40 @@ a:hover { filter: brightness(1.1); }
 .rating-low { background: hsl(var(--rating-low)); color: hsl(210 20% 94%); }
 
 /* Hero */
-.hero { padding: 48px 0 64px; }
+.hero { padding: 48px 0 64px; position: relative; background-color: hsl(var(--background)); overflow: hidden; }
+
+/* camada que contém a imagem (com o degradê aplicado diretamente sobre ela) */
+.hero-media {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 65%;
+  height: 100%;
+  background-image: url('https://www.usatoday.com/gcdn/authoring/authoring-images/2024/04/08/USAT/73239761007-joker-2-vert-tsr-standard-2764-x-4096-dom.jpg?crop=2745,1545,x3,y202');
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+}
+
+/* degradê e vinhetas aplicadas diretamente sobre a imagem (na mesma camada) */
+.hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(closest-side at 6% 50%, rgba(0,0,0,0.96), rgba(0,0,0,0) 50%),
+    radial-gradient(closest-side at 94% 50%, rgba(0,0,0,0.96), rgba(0,0,0,0) 50%),
+    linear-gradient(180deg, rgba(0,0,0,0) 6%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.95) 100%);
+  background-blend-mode: normal, normal, multiply;
+}
+
+/* Overlay que cria o degradê lateral/inferior e faz a imagem 'fundir' com o fundo escuro */
+.hero::before { display: none; }
+
+/* garantir que o conteúdo do hero fique acima do overlay */
+.hero .container { position: relative; z-index: 3; }
 .hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; }
 .hero h1 { font-size: clamp(32px, 4vw, 48px); line-height: 1.1; margin: 0 0 12px; }
 .hero p { color: hsl(var(--muted-foreground)); margin: 0 0 24px; }
@@ -78,11 +111,25 @@ a:hover { filter: brightness(1.1); }
 .reels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; height: 520px; overflow: hidden; }
 .reel { display: grid; gap: 12px; }
 .reel > img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; border: 1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
-.reel.anim1 { animation: scrollY 20s linear infinite; }
+.reel.anim1 { animation: scrollY 24s linear infinite; }
 .reel.anim2 { animation: scrollY 24s linear infinite reverse; }
-.reel.anim3 { animation: scrollY 28s linear infinite; }
+.reel.anim3 { animation: scrollY 24s linear infinite; }
 .reel:hover { animation-play-state: paused; }
 @keyframes scrollY { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+
+/* overlay garantido acima do background (fallback caso gradientes no background não apareçam) */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-image:
+    radial-gradient(closest-side at 6% 50%, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0) 50%),
+    radial-gradient(closest-side at 94% 50%, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0) 50%),
+    linear-gradient(180deg, rgba(0,0,0,0) 6%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.95) 100%);
+  background-blend-mode: normal, normal, multiply;
+}
 
 /* Sections */
 .section { padding: 48px 0; }
