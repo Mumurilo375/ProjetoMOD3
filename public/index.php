@@ -7,13 +7,16 @@
   <meta name="description" content="Avalie filmes. Descubra tendências e compartilhe opiniões." />
   <link rel="canonical" href="/static/index.html" />
   <meta name="robots" content="index,follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 <body data-page="landing">
   <header class="site-header">
     <div class="inner container">
-  <div class="brand"><a href="/static/index.html" aria-label="Home"><img src="img/LogoStarRate.png" alt="Logo StarRate" style="height:36px; display:block;"/></a></div>
+  <div class="brand"><a href="/static/index.html" aria-label="Home"><img src="img/LogoStarRate.png" alt="Logo StarRate"/></a></div>
       
       <nav class="nav">
         <a href="/static/movies.html">Filmes</a>
