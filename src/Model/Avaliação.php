@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use DateTime;
+use DateTime; //importando a classe DateTime do PHP para manipular datas, que será usada para armazenar a data de criação do post
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -10,19 +10,19 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
 
 #[Entity]
-class Post
+class Avaliação
 {
     #[Column, Id, GeneratedValue]
     private int $id;
 
     #[Column]
-    private string $content;
+    private string $content; // Conteúdo do post
 
-    #[ManyToOne]
+    #[ManyToOne] //essa linha indica que muitos posts podem ser feitos por um usuário
     private User $user;
 
     #[Column]
-    private DateTime $postDate;
+    private DateTime $postDate; // Data de criação do post
 
     public function __construct(string $content, User $user, DateTime $postDate)
     {
