@@ -14,47 +14,55 @@ use Doctrine\ORM\Mapping\Id;
 #[Entity]
 class Filme
 {
-
+    // Propriedades mapeadas para o banco de dados
     #[Column, Id, GeneratedValue]
     private int $id;
+
     #[Column]
     private string $titulo;
-    #[Column]
+
+    #[Column(type: "string", length: 600)]
     private string $sinopse;
+
     #[Column]
     private int $ano;
-    //falta q criar o caminho do poster
+
+    // novo campo: caminho relativo para a capa (ex: uploads/capas/abc.webp)
+    // nullable para não quebrar filmes antigos sem capa
+    #[Column(type: "string", length: 255, nullable: true)]
+    private ?string $capa = null;
 
 
-    public function __construct(string $titulo, string $sinopse, int $ano)
+    // Construtor: recebe os valores necessários ao criar um filme
+    // $capa é opcional para permitir criar filmes sem imagem
+    public function __construct(string $titulo, string $sinopse, int $ano, ?string $capa = null)
     {
         $this->titulo = $titulo;
         $this->sinopse = $sinopse;
         $this->ano = $ano;
+        $this->capa = $capa;
     }
 
-    public function getId(): int {return $this->id;}
+    // Getters simples para acessar os valores das propriedades
+    public function getId(): int { return $this->id; }
+    public function getTitulo(): string { return $this->titulo; }
+    public function getSinopse(): string { return $this->sinopse; }
+    public function getAno(): int { return $this->ano; }
+    public function getCapa(): ?string { return $this->capa; }
 
-	public function getTitulo(): string {return $this->titulo;}
-
-	public function getSinopse(): string {return $this->sinopse;}
-
-	public function getAno(): int {return $this->ano;}
-
-    public function save(): void //essa função salva o 11filme no banco de dados
+    // Persiste a entidade no banco usando o EntityManager do Doctrine
+    public function save(): void
     {
         $em = Database::getEntityManager();
         $em->persist($this);
         $em->flush();
     }
 
-    public static function findAll(): array //essa função busca todos os filmes no banco de dados, retornando um array de objetos Filme.
+    // Busca todos os filmes no banco (retorna um array de objetos Filme)
+    public static function findAll(): array
     {
         $em = Database::getEntityManager();
-        $repository = $em->getRepository(Filme::class); //essa linha serve para obter o repositório da entidade Filme
-        return $repository->findAll(); //retorna todos os filmes encontrados, o findAll serve para buscar todos os registros
+        $repository = $em->getRepository(Filme::class);
+        return $repository->findAll();
     }
-
-	
-
 }

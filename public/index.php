@@ -1,4 +1,53 @@
 <!doctype html>
+<!--
+  Página principal (frontend): mostra hero, carrosséis e links para login/signup.
+  Este arquivo é apenas a camada de apresentação (HTML/CSS/JS). A autenticação
+  é tratada em `auth.php` quando o usuário envia os formulários.
+  Observe que os recursos estáticos (img, css, js) ficam em `public/`.
+-->
+
+
+
+
+<?php 
+// carrega autoload do Composer para que as classes em src/ possam ser encontradas
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use App\Model\Filme;
+
+// fallback = imagem que vai aparecer como substituta caso não haja imagem do filme
+$fallback = 'https://i1.sndcdn.com/artworks-FnBdNXsN84HzazMs-ZPSsBw-t500x500.jpg';
+
+// busca todos os filmes (retorna array de objetos Filme)
+$filmes = Filme::findAll();
+
+// Mostrar apenas filmes com id entre 4 e 7 (inclusivo).
+// Assumo que a entidade Filme tem o método getId(). Se não, a checagem tentará acessar uma propriedade pública id.
+$filmes = array_filter($filmes, function($f) {
+  $id = null;
+  if (is_object($f) && method_exists($f, 'getId')) {
+    $id = $f->getId();
+  } elseif (is_object($f) && isset($f->id)) {
+    $id = $f->id;
+  }
+  return is_int($id) && $id >= 4 && $id <= 7;
+});
+
+// Reindexa o array para índices 0..n-1, facilita o uso em loops.
+$filmes = array_values($filmes);
+
+// Observação: não imprimimos imagens aqui para evitar mostrar fallbacks no topo.
+// Usaremos a variável $filmes mais abaixo dentro da área do carrossel para renderizar as capas.
+
+
+
+
+
+?>
+
+
+
+
 <html lang="pt-br">
 <head>
   <meta charset="utf-8" />
@@ -23,8 +72,8 @@
         <a href="/static/series.html">Lançamentos</a>
       </nav>
       <div class="nav">
-        <a class="btn btn-ghost" href="#">Login</a>
-        <a class="btn btn-primary" href="#">Sign up</a>
+        <a class="btn btn-ghost" href="auth.php">Login</a>
+        <a class="btn btn-primary" href="auth.php?view=signup">Sign up</a>
       </div>
     </div>
   </header>
@@ -40,36 +89,96 @@
         </form>
       </section>
       <aside aria-label="Carrosséis de pôsteres" class="reels">
-        <div class="reel anim1">
-          <img src="img/10coisasQueOdeioEmVoce.webp" alt="Pôster em destaque 1" loading="lazy" />
-          <img src="img/f1.webp" alt="Pôster em destaque 2" loading="lazy" />
-          <img src="img/itACoisa.jpg" alt="Pôster em destaque 3" loading="lazy" />
-          <img src="img/interestelar.jpg" alt="Pôster em destaque 4" loading="lazy" />
-          <img src="img/10coisasQueOdeioEmVoce.webp" alt="Pôster em destaque 1 (loop)" loading="lazy" />
-          <img src="img/f1.webp" alt="Pôster em destaque 2 (loop)" loading="lazy" />
-          <img src="img/itACoisa.jpg" alt="Pôster em destaque 3 (loop)" loading="lazy" />
-          <img src="img/interestelar.jpg" alt="Pôster em destaque 4 (loop)" loading="lazy" />
-        </div>
-        <div class="reel anim2">
-          <img src="img/weapons.jpg" alt="Pôster em destaque 5" loading="lazy" />
-          <img src="img/donnieDarko.jpg" alt="Pôster em destaque 6" loading="lazy" />
-          <img src="img/drive.jpg" alt="Pôster em destaque 7" loading="lazy" />
-          <img src="img/joker.png" alt="Pôster em destaque 8" loading="lazy" />
-          <img src="img/weapons.jpg" alt="Pôster em destaque 5 (loop)" loading="lazy" />
-          <img src="img/donnieDarko.jpg" alt="Pôster em destaque 6 (loop)" loading="lazy" />
-          <img src="img/drive.jpg" alt="Pôster em destaque 7 (loop)" loading="lazy" />
-          <img src="img/joker.png" alt="Pôster em destaque 8 (loop)" loading="lazy" />
-        </div>
-        <div class="reel anim3">
-          <img src="img/whiplash.webp" alt="Pôster em destaque 9" loading="lazy" />
-          <img src="img/28years.webp" alt="Pôster em destaque 10" loading="lazy" />
-          <img src="img/invocaçãoDoMal4.jpg" alt="Pôster em destaque 11" loading="lazy" />
-          <img src="img/premonição.jpg" alt="Pôster em destaque 12" loading="lazy" />
-          <img src="img/whiplash.webp" alt="Pôster em destaque 9 (loop)" loading="lazy" />
-          <img src="img/28years.webp" alt="Pôster em destaque 10 (loop)" loading="lazy" />
-          <img src="img/invocaçãoDoMal4.jpg" alt="Pôster em destaque 11 (loop)" loading="lazy" />
-          <img src="img/premonição.jpg" alt="Pôster em destaque 12 (loop)" loading="lazy" />
-        </div>
+        <?php
+        // Se não houver filmes, exibimos placeholders estáticos (mantém layout)
+
+
+        //-> verifica se a variável $filmes está "vazia". empty() é true quando $filmes é null, string vazia, 0, false ou um array sem elementos. No seu caso serve para saber se não há filmes carregados.
+        if (empty($filmes)) { 
+
+          //-> laço que repete 3 vezes. A sintaxe com ":" e depois endfor; é apenas a forma alternativa à chave { } — aqui você cria 3 "reels" de placeholder.
+          for ($r = 0; $r < 3; $r++):
+
+            //ACHO QUE AGORA SÓ FALTA ADICIONAR OS FILMES NO BANCO DE DADOS, E APOS ISSO, A CADA IMG SRC, EU COLOCAR $R + 1, $R + 2, $R + 3, ...., quero testar logo pq é facil, porem é bom comitar isso antes!
+    
+        ?>
+          <div class="reel anim<?= $r + 1 ?>">
+            <img src="img/10coisasQueOdeioEmVoce.webp" alt="Placeholder" loading="lazy" />
+            <img src="img/f1.webp" alt="Placeholder" loading="lazy" />
+            <img src="img/itACoisa.jpg" alt="Placeholder" loading="lazy" />
+            <img src="img/interestelar.jpg" alt="Placeholder" loading="lazy" />
+            <img src="img/10coisasQueOdeioEmVoce.webp" alt="Placeholder" loading="lazy" />
+            <img src="img/f1.webp" alt="Placeholder" loading="lazy" />
+            <img src="img/itACoisa.jpg" alt="Placeholder" loading="lazy" />
+            <img src="img/interestelar.jpg" alt="Placeholder" loading="lazy" />
+          </div>
+        <?php
+          endfor;
+        } else {
+          // Distribui os filmes alternadamente entre 3 reels
+          $reels = [[], [], []];
+          foreach ($filmes as $i => $f) {
+            $reels[$i % 3][] = $f;
+          }
+
+          // Gera cada reel imprimindo cada lista duas vezes para efeito de loop
+          for ($r = 0; $r < 3; $r++):
+        ?>
+            <div class="reel anim<?= $r + 1 ?>">
+              <?php
+                $list = $reels[$r];
+                // imprime duas vezes para o loop visual
+                for ($loop = 0; $loop < 2; $loop++) {
+                  foreach ($list as $fil) {
+                    // Normaliza e valida o caminho da capa
+                    $capaRaw = $fil->getCapa();
+                    $titulo = $fil->getTitulo() ?: 'Poster';
+                    $src = $fallback; // padrão
+
+                    if (!empty($capaRaw)) {
+                      // uniformiza barras
+                      $capaRaw = str_replace('\\', '/', $capaRaw);
+                      // Remove um possível prefixo "public/" vindo do banco
+                      $capaRaw = preg_replace('#^/??public/#i', '', $capaRaw);
+                      $isUrl = (bool) preg_match('#^https?://#i', $capaRaw);
+
+                      if ($isUrl) {
+                        // URL remota — usa direto
+                        $src = $capaRaw;
+                      } else {
+                        // tenta caminhos comuns relativos à pasta public/
+                        $candidates = [
+                          __DIR__ . '/' . ltrim($capaRaw, '/'),
+                          __DIR__ . '/img/' . ltrim($capaRaw, '/'),
+                          __DIR__ . '/uploads/capas/' . ltrim($capaRaw, '/'),
+                        ];
+
+                        foreach ($candidates as $cand) {
+                          if (file_exists($cand)) {
+                            // transforma em src relativo ao public/
+                            $rel = str_replace('\\', '/', substr($cand, strlen(__DIR__) + 1));
+                            $src = $rel ?: $fallback;
+                            break;
+                          }
+                        }
+                      }
+                    }
+
+                    echo '<img src="' . htmlspecialchars($src, ENT_QUOTES, 'UTF-8') . '" alt="' . htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8') . '" loading="lazy" />';
+                  }
+                }
+                // se a lista estiver vazia, mostra placeholders curtos
+                if (empty($list)) {
+                  for ($k = 0; $k < 4; $k++) {
+                    echo '<img src="img/10coisasQueOdeioEmVoce.webp" alt="Placeholder" loading="lazy" />';
+                  }
+                }
+              ?>
+            </div>
+        <?php
+          endfor;
+        }
+        ?>
       </aside>
     </div>
 
@@ -77,7 +186,7 @@
       <div class="container">
         <h2>Destaques da semana</h2>
         <div class="grid cols-6">
-          <figure class="card"><img src="/static/posters/poster1.jpg" alt="Destaque #1" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #1</figcaption></figure>
+          <figure class="card"><img src="" alt="Destaque #1" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #1</figcaption></figure>
           <figure class="card"><img src="/static/posters/poster2.jpg" alt="Destaque #2" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #2</figcaption></figure>
           <figure class="card"><img src="/static/posters/poster3.jpg" alt="Destaque #3" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #3</figcaption></figure>
           <figure class="card"><img src="/static/posters/poster4.jpg" alt="Destaque #4" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #4</figcaption></figure>

@@ -1,22 +1,19 @@
 <?php
+// Página simples para cadastrar e listar usuários (apenas exemplo)
+use App\Model\User;
 
-use App\Model\User; //importando a classe User do namespace App\Model, para usar a classe User, que está definida em src/Model/User.php, sem isso, o código não funcionaria, pois a classe User não estaria disponível no escopo deste arquivo
+require_once __DIR__ . '/../vendor/autoload.php'; // carrega Composer e o autoload do projeto
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
-//esse if verifica se o formulário foi submetido, ou seja, se há dados enviados via método POST, para então criar um novo usuário e salvá-lo no banco de dados
-if ($_POST) { 
-    $user = new User(
-        name: $_POST['user_name'],
-        email: $_POST['user_email'],
-        password: $_POST['user_password']
-    );
-    
-    $user->save(); //essa linha chama o método save() da classe User para salvar o novo usuário no banco de dados
+// Quando o formulário é enviado (via POST), criamos um usuário e salvamos.
+// Aqui usamos um exemplo simples sem validação detalhada.
+if ($_POST) {
+    // usa a factory para criar um usuário com campos mínimos (nome, email, senha)
+    $user = User::createFromSignup(trim($_POST['user_name'] ?? ''), trim($_POST['user_email'] ?? ''), $_POST['user_password'] ?? '');
+    $user->save();
 }
 
-$users = User::findAll(); //essa linha chama o método estático findAll() da classe User para buscar todos os usuários no banco de dados e armazená-los na variável $users, que será usada para exibir a lista de usuários na tabela abaixo
-
+// Busca todos os usuários para mostrar na tabela abaixo
+$users = User::findAll();
 ?>
 
 <!DOCTYPE html>
@@ -25,9 +22,11 @@ $users = User::findAll(); //essa linha chama o método estático findAll() da cl
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuários</title>
+    <style>table{border-collapse:collapse}td,th{border:1px solid #ddd;padding:6px}</style>
 </head>
 <body>
-    <h1>Cadastro de Usuários</h1>
+    <h1>Cadastro de Usuários (exemplo)</h1>
+    <!-- Formulário simples: nome, email e senha -->
     <form method="post">
         <label>Nome</label>
         <input type="text" name="user_name">
@@ -37,10 +36,13 @@ $users = User::findAll(); //essa linha chama o método estático findAll() da cl
         <input type="text" name="user_password">
         <input type="submit" value="Salvar">
     </form>
+
     <h3>Lista de Usuários</h3>
     <table>
         <tr><th>Id</th><th>Nome</th><th>Email</th></tr>
-        <?php foreach($users as $user): ?>
+        <?php
+        // Percorre o array de usuários retornado pelo repositório
+        foreach ($users as $user): ?>
             <tr>
                 <td><?= $user->getId() ?></td>
                 <td><?= $user->getName() ?></td>
