@@ -1,0 +1,37 @@
+/* Auth (frontend only) */
+:root { --ring: 45 87% 62%; }
+
+/* Fundo aurora sutil e card central */
+.auth-wrap { min-height: 100dvh; display:grid; place-items:center; padding:32px; position:relative; }
+.auth-wrap::before { content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; background:
+  radial-gradient(100% 80% at 0% 0%, hsl(194 82% 22% / .22), transparent 60%),
+  radial-gradient(80% 70% at 100% 10%, hsl(45 87% 32% / .18), transparent 60%),
+  radial-gradient(100% 80% at 50% 100%, hsl(240 6% 12% / .5), transparent 60%),
+  linear-gradient(hsl(var(--background)), hsl(var(--background)));
+}
+.auth-card { width: 100%; max-width: 560px; padding: 26px; }
+.title { margin:0 0 8px; font-size: 24px; font-weight:700; font-family: "Space Grotesk", Inter, system-ui; }
+.subtitle { margin:0 0 16px; color:hsl(var(--muted-foreground)); }
+
+/* Tabs */
+.segmented { display:flex; gap:6px; background:hsl(var(--card)); border:1px solid hsl(var(--border)); border-radius: 12px; padding:4px; margin-bottom: 14px; }
+.seg { flex:1; padding:10px 12px; border-radius:10px; background:transparent; border:0; color:hsl(var(--foreground)); cursor:pointer; font-weight:600; }
+.seg.active { background:hsl(var(--muted) / .35); }
+.seg:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset: 2px; }
+
+/* Campos */
+.field { display:grid; gap:6px; margin: 12px 0 14px; }
+.field label { font-size: 13px; color: hsl(var(--muted-foreground)); }
+.field input { height: 46px; border-radius: 12px; border: 1px solid hsl(var(--border)); background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 0 12px; }
+.field input:focus { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+/* Selects (sexo) seguem o mesmo padrão visual dos inputs */
+.field select { height: 46px; border-radius: 12px; border: 1px solid hsl(var(--border)); background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 0 12px; }
+.field select:focus { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+
+/* Nota */
+.note { margin-top: 12px; color:hsl(var(--muted-foreground)); font-size: 12px; text-align:center; }
+
+/* Responsivo */
+@media (max-width: 640px) {
+  .auth-card { padding: 20px; }
+}
