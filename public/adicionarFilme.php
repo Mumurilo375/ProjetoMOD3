@@ -6,11 +6,42 @@ use App\Model\Filme;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+$caminhoDaCapa = '';
 
 
 
 // Se recebeu POST, cria a entidade e salva no banco
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+
+    // --- NOVA LÓGICA DE UPLOAD DA IMAGEM ---
+
+    // 1. Verifica se o campo 'film_capa' foi enviado e se não houve erro no upload.
+    if (isset($_FILES['film_capa']) && $_FILES['film_capa']['error'] === UPLOAD_ERR_OK) {
+
+        // 2. Define o diretório de destino. Crie esta pasta no seu projeto!
+        $diretorioUpload = __DIR__ . '/../public/img/';
+
+        // 3. Pega o nome temporário do arquivo no servidor.
+        $arquivoTemporario = $_FILES['film_capa']['tmp_name'];
+
+        // 4. Cria um nome de arquivo único e seguro para evitar conflitos.
+        $nomeOriginal = basename($_FILES['film_capa']['name']);
+        $extensao = pathinfo($nomeOriginal, PATHINFO_EXTENSION);
+        $nomeUnico = uniqid('capa_', true) . '.' . $extensao;
+
+        // 5. Monta o caminho completo onde o arquivo será salvo.
+        $caminhoFinal = $diretorioUpload . $nomeUnico;
+
+        // 6. Move o arquivo da pasta temporária para o destino final.
+        if (move_uploaded_file($arquivoTemporario, $caminhoFinal)) {
+            // Se o upload deu certo, guarda o caminho relativo para salvar no banco.
+            $caminhoDaCapa = 'img/capas/' . $nomeUnico;
+        } else {
+            // Se falhar, você pode adicionar uma mensagem de erro aqui.
+            $caminhoDaCapa = ''; // Garante que fique vazio se o upload falhar.
+        }
+    }
 
     // normaliza e sanitiza valores do POST
     $titulo = trim($_POST['film_titulo'] ?? '');
@@ -18,8 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ano = intval($_POST['film_anoLancamento'] ?? 0);
     $diretor = trim($_POST['film_diretor'] ?? '');
     $genero = trim($_POST['film_genero'] ?? '');
-    // garante que capa seja sempre uma string (evita TypeError no construtor)
-    $capa = trim($_POST['film_capa'] ?? '');
 
     // construtor de Filme aceita (titulo, sinopse, ano, capa)
     $filme = new Filme(
@@ -28,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ano,
         diretor: $diretor,
         genero: $genero,
-        capa: $capa
+        capa: $caminhoDaCapa //aqui usamos o nome do arquivo enviado via upload
     );
 
     $filme->save();
@@ -65,44 +94,43 @@ $filmes = Filme::findAll();
 
 
     <!-- action explícita para enviar para esta mesma página -->
-    <form method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+    <form method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" enctype="multipart/form-data">
         <div class="form-grid">
             <div class="form-row">
                 <label>Título</label>
-                <input type="text" name="film_titulo" value="<?= htmlspecialchars($_POST['film_titulo'] ?? '', ENT_QUOTES) ?>">
+                <input type="text" name="film_titulo" required>
             </div>
             <div class="form-row">
                 <label>Ano de Lançamento</label>
-                <input type="text" name="film_anoLancamento" value="<?= htmlspecialchars($_POST['film_anoLancamento'] ?? '', ENT_QUOTES) ?>">
+                <input type="number" name="film_anoLancamento" required>
             </div>
 
             <div class="form-row full">
                 <label>Sinopse</label>
-                <textarea name="film_sinopse" rows="6"><?= htmlspecialchars($_POST['film_sinopse'] ?? '', ENT_QUOTES) ?></textarea>
+                <textarea name="film_sinopse" rows="6"></textarea>
             </div>
 
             <div class="form-row">
                 <label>Diretor</label>
-                <input type="text" name="film_diretor" value="<?= htmlspecialchars($_POST['film_diretor'] ?? '', ENT_QUOTES) ?>">
+                <input type="text" name="film_diretor">
             </div>
             <div class="form-row">
                 <label>Gênero</label>
                 <select name="film_genero" class="form-select">
-                    <?php $selectedGenre = $_POST['film_genero'] ?? ''; ?>
                     <option value="">Escolha...</option>
-                    <option value="Ação" <?= $selectedGenre === 'Ação' ? 'selected' : '' ?>>Ação</option>
-                    <option value="Comédia" <?= $selectedGenre === 'Comédia' ? 'selected' : '' ?>>Comédia</option>
-                    <option value="Terror" <?= $selectedGenre === 'Terror' ? 'selected' : '' ?>>Terror</option>
-                    <option value="Ficção Científica" <?= $selectedGenre === 'Ficção Científica' ? 'selected' : '' ?>>Ficção Científica</option>
-                    <option value="Animação" <?= $selectedGenre === 'Animação' ? 'selected' : '' ?>>Animação</option>
-                    <option value="Suspense" <?= $selectedGenre === 'Suspense' ? 'selected' : '' ?>>Suspense</option>
-                    <option value="Românce" <?= $selectedGenre === 'Românce' ? 'selected' : '' ?>>Românce</option>
+                    <option value="Ação">Ação</option>
+                    <option value="Comédia">Comédia</option>
+                    <option value="Terror">Terror</option>
+                    <option value="Ficção Científica">Ficção Científica</option>
+                    <option value="Animação">Animação</option>
+                    <option value="Suspense">Suspense</option>
+                    <option value="Românce">Românce</option>
                 </select>
             </div>
 
             <div class="form-row full">
-                <label>Caminho da Capa</label>
-                <input type="text" name="film_capa" value="<?= htmlspecialchars($_POST['film_capa'] ?? '', ENT_QUOTES) ?>">
+                <label>Capa do Filme</label>
+                <input type="file" name="film_capa" accept="image/png, image/jpeg, image/webp">
             </div>
         </div>
         <div class="actions">
@@ -113,32 +141,32 @@ $filmes = Filme::findAll();
     </div>
     <hr>
     <h2 class="lista-title">Lista de filmes</h2>
-    <table>
-        <thead>
+    <table class="lista-filmes"> <thead>
             <tr>
                 <th>Id</th>
-                <th>Titulo</th>
-                <th>Sinopse</th>
-                <th>Ano de Lançamento</th>
-                <th>Diretor</th>
-                <th>Gênero</th>
                 <th>Capa</th>
+                <th>Titulo</th>
+                <th>Ano</th>
+                <th>Gênero</th>
+                <th>Diretor</th>
             </tr>
         </thead>
         <tbody>
         <?php foreach ($filmes as $filme): ?>
             <tr>
-                <td> <?= $filme->getId() ?> </td>
-                <td> <?= $filme->getTitulo() ?> </td>
-                <td> <?= $filme->getSinopse() ?> </td>
-                <td> <?= $filme->getAnoLancamento() ?> </td>
-                <td> <?= $filme->getDiretor() ?> </td>
-                <td> <?= $filme->getGenero() ?> </td>
-                <td> <?= $filme->getCapa() ?> </td>
+                <td><?= htmlspecialchars($filme->getId()) ?></td>
+                <td>
+                    <?php if ($filme->getCapa()): // Só mostra a imagem se houver uma capa ?>
+                        <img src="<?= htmlspecialchars($filme->getCapa()) ?>" alt="Capa" width="50">
+                    <?php endif; ?>
+                </td>
+                <td><?= htmlspecialchars($filme->getTitulo()) ?></td>
+                <td><?= htmlspecialchars($filme->getAnoLancamento()) ?></td>
+                <td><?= htmlspecialchars($filme->getGenero()) ?></td>
+                <td><?= htmlspecialchars($filme->getDiretor()) ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
-    
 </body>
 </html>
