@@ -125,6 +125,8 @@ $filmes = Filme::findAll();
                     <option value="Animação">Animação</option>
                     <option value="Suspense">Suspense</option>
                     <option value="Românce">Românce</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Guerra">Guerra</option>
                 </select>
             </div>
 

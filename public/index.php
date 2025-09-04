@@ -15,12 +15,24 @@ $fallback = 'https://i1.sndcdn.com/artworks-FnBdNXsN84HzazMs-ZPSsBw-t500x500.jpg
 // busca todos os filmes (retorna array de objetos Filme)
 $filmeRepository = $entityManager->getRepository(Filme::class);
 
-//buscando os ultimos 4 filmes adicionados no banco, para o carrossel
-//(ordenando o id de forma decrescente)
-$filmesParaCarrossel = $filmeRepository->findBy([],['id' => 'DESC' ], 4);
+// Carrossel 1: filmes 1-4 (mais recentes)
+$filmesParaCarrossel1 = $filmeRepository->findBy([],['id' => 'DESC' ], 4);
+$primeirosFilmesParaLoop1 = array_slice($filmesParaCarrossel1, 0, min(4, count($filmesParaCarrossel1)));
+$filmesComLoop1 = array_merge($filmesParaCarrossel1, $primeirosFilmesParaLoop1);
 
-//agora a variavel $filmesParaCarrossel contém um array com 4 filmes
+// Carrossel 2: filmes 5-8
+$filmesParaCarrossel2 = $filmeRepository->findBy([],['id' => 'DESC' ], 8);
+$filmesParaCarrossel2 = array_slice($filmesParaCarrossel2, 4, 4);
+$primeirosFilmesParaLoop2 = array_slice($filmesParaCarrossel2, 0, min(4, count($filmesParaCarrossel2)));
+$filmesComLoop2 = array_merge($filmesParaCarrossel2, $primeirosFilmesParaLoop2);
 
+// Carrossel 3: filmes 9-12
+$filmesParaCarrossel3 = $filmeRepository->findBy([],['id' => 'DESC' ], 12);
+$filmesParaCarrossel3 = array_slice($filmesParaCarrossel3, 8, 4);
+$primeirosFilmesParaLoop3 = array_slice($filmesParaCarrossel3, 0, min(4, count($filmesParaCarrossel3)));
+$filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
+
+// os arrays para os três carrosseis já foram montados acima (filmesComLoop1/2/3)
 ?>
 
 
@@ -101,20 +113,55 @@ $filmesParaCarrossel = $filmeRepository->findBy([],['id' => 'DESC' ], 4);
           <?php
 
           //loop atraves dos objetos Filme que buscamos no banco pelo 'find by'
-          foreach ($filmesParaCarrossel as $filme):
+          foreach ($filmesComLoop1 as $filme):
           ?>
 
           <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" loading="lazy">
+
 
           <?php 
           endforeach;
           ?>
 
         </div>
-              
-          
+        <div class="reel anim2">
+          <?php
+
+          //loop atraves dos objetos Filme que buscamos no banco pelo 'find by'
+          foreach ($filmesComLoop2 as $filme):
+          ?>
+
+          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" loading="lazy">
+
+
+          <?php 
+          endforeach;
+          ?>
+
+        </div>
+        <div class="reel anim3">
+          <?php
+
+          //loop atraves dos objetos Filme que buscamos no banco pelo 'find by'
+          foreach ($filmesComLoop3 as $filme):
+          ?>
+
+          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" loading="lazy">
+
+
+          <?php
+          endforeach;
+          ?>
+
+        </div>
       </aside>
+
     </div>
+
+
+
+
+
 
     <section class="section">
       <div class="container">
@@ -126,6 +173,7 @@ $filmesParaCarrossel = $filmeRepository->findBy([],['id' => 'DESC' ], 4);
           <figure class="card"><img src="/static/posters/poster4.jpg" alt="Destaque #4" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #4</figcaption></figure>
           <figure class="card"><img src="/static/posters/poster5.jpg" alt="Destaque #5" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #5</figcaption></figure>
           <figure class="card"><img src="/static/posters/poster6.jpg" alt="Destaque #6" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #6</figcaption></figure>
+          
         </div>
       </div>
     </section>
