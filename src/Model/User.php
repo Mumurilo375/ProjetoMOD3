@@ -3,108 +3,117 @@
 namespace App\Model;
 
 use App\Core\Database;
-use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use DateTime;
 
-// Classe User: representa um usuário do sistema.
-// Contém propriedades (nome, email, senha, etc.), métodos para salvar
-// e buscar usuários, e factories para criação padrão/admin.
 #[Entity]
 class User
 {
+
     #[Id, Column(name: "id"), GeneratedValue]
     private int $id;
 
-    // Nome do usuário mapeado para a coluna `name` no banco
-    #[Column(name: "name")]
+
+    #[Column]
     private string $nome;
 
-    // Campos não obrigatórios no banco (opcionais no formulário)
-    #[Column(name: "sobrenome")]
-    private string $sobrenome;
-    #[Column(name: "sexo")]
-    private string $sexo;
-    #[Column(name: "nivel_de_acesso")]
-    private string $nivelDeAcesso;
-    #[Column(name: "dataDeCadastro")]
-    private string $dataDeCadastro;
-
-    // Email e senha mapeados para colunas existentes
-    #[Column(name: "email")]
+    #[Column (unique: true)]
     private string $email;
 
-    #[Column(name: "password")]
-    private string $password;
+    #[Column]
+    private string $senha;  // Guardará o hash da senha, nunca a senha pura.
 
-    /**
-     * Construtor do usuário.
-     * Garante que o nível padrão seja 'user' se o valor recebido for vazio.
-     */
-    public function __construct(string $nome, string $sobrenome, string $sexo, string $nivelDeAcesso, string $email, string $dataDeCadastro, string $password)
+    #[Column(type: "datetime")]
+    private DateTime $dataCadastro;
+
+
+    public function __construct(string $nome, string $email, string $senhaPura)
     {
         $this->nome = $nome;
-        $this->sobrenome = $sobrenome;
-        $this->sexo = $sexo;
-        $this->nivelDeAcesso = $nivelDeAcesso ?: 'user';
         $this->email = $email;
-        $this->dataDeCadastro = $dataDeCadastro;
-        $this->password = $password;
+
+        $this->setSenha($senhaPura); // Chama o método que CRIA O HASH
+
+        // Define a data de cadastro para o momento exato da criação do objeto.
+        $this->dataCadastro = new DateTime();
     }
 
-    // Getters básicos
-    public function getId(): int { return $this->id; }
-    public function getNome(): string { return $this->nome; }
-    public function getName(): string { return $this->nome; } // compatibilidade
-    public function getSobrenome(): string { return $this->sobrenome; }
-    public function getSexo(): string { return $this->sexo; }
-    public function getNivelDeAcesso(): string { return $this->nivelDeAcesso; }
-    public function getEmail(): string { return $this->email; }
-    public function getDataDeCadastro(): string { return $this->dataDeCadastro; }
-    public function getPassword(): string { return $this->password; }
+    public function setSenha(string $senhaPura): void
+    {
+        // A mágica do hash seguro acontece aqui.
+        $this->senha = password_hash($senhaPura, PASSWORD_DEFAULT);
+    }
 
-    // Persiste a entidade no banco (Doctrine EntityManager)
+    //FUNÇÃO PARA VERIFICAR SE A SENHA PURA (FORNECIDA PELO FORMULARIO DE LOGIN) CORRESPONDE AO HASH ARMAZENADO
+     public function verificaSenha(string $senhaPura): bool
+    {
+        return password_verify($senhaPura, $this->senha);
+    }
+
+    public function getId(): int {return $this->id;}
+
+	public function getNome(): string {return $this->nome;}
+
+	public function getEmail(): string {return $this->email;}
+
+	public function getSenha(): string {return $this->senha;}
+
+	public function getDataCadastro(): DateTime {return $this->dataCadastro;}
+
+	// Persiste a entidade no banco usando o EntityManager do Doctrine
     public function save(): void
     {
-        $em = Database::getEntityManager();
-        $em->persist($this);
-        $em->flush();
+        $entityManager = Database::getEntityManager();
+        $entityManager->persist($this);
+        $entityManager->flush();
     }
 
-    // Retorna todos os usuários (uso do repository do Doctrine)
-    public static function findAll(): array
-    {
-        $em = Database::getEntityManager();
-        $repository = $em->getRepository(User::class);
-        return $repository->findAll();
+    /*observações
+    
+    diferença de $senha e $senhaPura:
+
+    - $senhaPura é a chave, é o texto que o user digita no formulário de login, tipo "minhasenha123"
+    ela só existe no momento do login, nunca é armazenada no banco.
+
+    - $senha é o hash gerado a partir do $senhaPura, é o que está armazenado no banco de dados.
+    
+
+
+    CADASTRO DO USUÁRIO
+
+    - Quando o user se cadastro, ele fornece a $senhapura,
+    $senhapura = $_POST['senha'] // minhasenha123
+
+    - Voce cria um user passando essa senhapura
+    $novoUsuario = new User("Nome do Usuário", "email@email.com", $senhaPura);
+
+    - Dentro do construtor, voce chama o método setSenha que gera o hash e atribui a $senha
+    $this->senha = password_hash($senhaPura, PASSWORD_DEFAULT);
+
+
+
+    LOGIN DO USUÁRIO
+    
+    - O User preenche o formulário de login com a senha pura
+    $senhapura = $_POST['senha'] // minhasenha123
+
+    - Voce busca o usuário no banco pelo email dele. Este objeto $usuario que vem do banco tem o hash armazenado na propriedade $senha
+
+    - Este é o passo crucial, voce não cria um hash novo, voce usa o metodo verificaSenha para comparar a senhapura com o hash armazenado
+    if ($usuario->verificaSenha($senhaPura)) {
+        // Senha correta, login ok
+    } else {
+        // Senha incorreta
     }
 
-    // Valida a senha comparando sha256 (demo)
-    public function validatePassword(string $password): bool
-    {
-        return $this->password == hash('sha256', $password);
-    }
+    - O que o método verificaSenha() faz por baixo dos panos? Ele usa a função password_verify(). Essa função é o "teste":
+        Ela pega a chave que o usuário te deu ($senhaPuraDoLogin 🗝️).
+        Ela pega a fechadura que estava na porta ($this->senha 🔐).
+        Ela faz o teste e retorna true se a chave abrir a fechadura, ou false se não abrir.
+    
+    */
 
-    // Factory para criar usuário padrão (usado no signup)
-    public static function createFromSignup(string $nome, string $email, string $plainPassword): self
-    {
-        $sobrenome = '';
-        $sexo = 'ND';
-        $nivelDeAcesso = 'user';
-        $dataDeCadastro = date('Y-m-d H:i:s');
-        $hashed = hash('sha256', $plainPassword);
-
-        return new self($nome, $sobrenome, $sexo, $nivelDeAcesso, $email, $dataDeCadastro, $hashed);
-    }
-
-    // Factory para criar administradores explicitamente
-    public static function createAdmin(string $nome, string $email, string $plainPassword, string $sobrenome = '', string $sexo = 'ND'): self
-    {
-        $nivelDeAcesso = 'admin';
-        $dataDeCadastro = date('Y-m-d H:i:s');
-        $hashed = hash('sha256', $plainPassword);
-
-        return new self($nome, $sobrenome, $sexo, $nivelDeAcesso, $email, $dataDeCadastro, $hashed);
-    }
 }

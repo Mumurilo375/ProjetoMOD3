@@ -2,53 +2,60 @@
 
 namespace App\Model;
 
-use App\Core\Database;
+use App\Core\Database; 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 
-
-
-// alt shift f para formatar o codigo
 #[Entity]
 class Filme
 {
-    // Propriedades mapeadas para o banco de dados
-    #[Column, Id, GeneratedValue]
+    #[Id, Column(type: "integer"), GeneratedValue]
     private int $id;
 
     #[Column]
     private string $titulo;
 
-    #[Column(type: "string", length: 600)]
+    #[Column(type: "text")]
     private string $sinopse;
 
     #[Column]
-    private int $ano;
+    private int $anoLancamento;
 
-    // novo campo: caminho relativo para a capa (ex: uploads/capas/abc.webp)
-    // nullable para não quebrar filmes antigos sem capa
-    #[Column(type: "string", length: 255, nullable: true)]
-    private ?string $capa = null;
+    #[Column]
+    private string $diretor;
+
+    #[Column]
+    private string $genero;
+
+    #[Column]
+    private string $capa; //ex: public/img/interestelar.jpg
 
 
-    // Construtor: recebe os valores necessários ao criar um filme
-    // $capa é opcional para permitir criar filmes sem imagem
-    public function __construct(string $titulo, string $sinopse, int $ano, ?string $capa = null)
+    public function __construct(string $titulo, string $sinopse, int $anoLancamento, string $diretor, string $genero, string $capa)
     {
         $this->titulo = $titulo;
         $this->sinopse = $sinopse;
-        $this->ano = $ano;
+        $this->anoLancamento = $anoLancamento;
+        $this->diretor = $diretor;
+        $this->genero = $genero;
         $this->capa = $capa;
     }
 
-    // Getters simples para acessar os valores das propriedades
-    public function getId(): int { return $this->id; }
-    public function getTitulo(): string { return $this->titulo; }
-    public function getSinopse(): string { return $this->sinopse; }
-    public function getAno(): int { return $this->ano; }
-    public function getCapa(): ?string { return $this->capa; }
+    public function getId(): int {return $this->id;}
+
+	public function getTitulo(): string {return $this->titulo;}
+
+	public function getSinopse(): string {return $this->sinopse;}
+
+	public function getAnoLancamento(): int {return $this->anoLancamento;}
+
+	public function getDiretor(): string {return $this->diretor;}
+
+	public function getGenero(): string {return $this->genero;}
+
+	public function getCapa(): string {return $this->capa;}
 
     // Persiste a entidade no banco usando o EntityManager do Doctrine
     public function save(): void
@@ -58,11 +65,13 @@ class Filme
         $em->flush();
     }
 
-    // Busca todos os filmes no banco (retorna um array de objetos Filme)
+    //busca todos os filmes no banco retornando um array de objetos Filme
     public static function findAll(): array
     {
         $em = Database::getEntityManager();
         $repository = $em->getRepository(Filme::class);
         return $repository->findAll();
     }
+
+
 }

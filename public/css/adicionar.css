@@ -1,0 +1,28 @@
+/* Estilos para a página AdicionarFilme */
+:root{ --bg:#0b0b0b; --card:#111215; --muted:#6b6b6b; --accent: hsl(45 87% 56%); --text:#e9eef0; }
+body.adicionar { background: linear-gradient(180deg, #071018 0%, #0b0b0b 100%); color:var(--text); font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+.container-add { max-width: 980px; margin: 28px auto; padding: 20px; }
+.card-add { background: var(--card); border-radius: 12px; padding: 18px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.03); }
+.card-add h1{ margin:0 0 12px; font-size:20px; }
+.form-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; align-items:start; }
+.form-row{ display:flex; flex-direction:column; gap:6px; }
+label{ font-size:13px; color:var(--muted); }
+input[type='text'], textarea{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text); padding:10px 12px; border-radius:8px; }
+select.form-select { background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); color:var(--text); padding:10px 12px; border-radius:8px; appearance:none; -webkit-appearance:none; }
+select.form-select option{ background: var(--card); color: var(--text); }
+select.form-select:focus{ outline: 2px solid rgba(47,184,111,0.12); box-shadow: 0 4px 14px rgba(47,184,111,0.06); }
+textarea{ resize:vertical; min-height:110px; }
+.full{ grid-column: 1 / -1; }
+.actions{ display:flex; gap:10px; align-items:center; margin-top:10px; }
+.btn-save{ background: hsl(45 87% 56%); color:#062018; border:0; padding:10px 14px; border-radius:10px; font-weight:600; cursor:pointer; transition: filter .12s ease, transform .08s ease; }
+.btn-save:hover{ filter: brightness(.95); transform: translateY(-1px); }
+.btn-save:active{ filter: brightness(.9); transform: translateY(0); }
+
+.lista-title{ text-align: center; margin-top: 18px; }
+.table-wrap{ margin-top:18px; overflow:auto; }
+table{ width:100%; border-collapse:collapse; font-size:14px; }
+th, td{ padding:10px 12px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.03); }
+thead th{ color:var(--muted); font-weight:600; font-size:13px; }
+@media (max-width:720px){ .form-grid{ grid-template-columns: 1fr; } }
+
+hr { border: none; height: 3px; background: hsl(194 82% 22% / .22); margin: 20px 0; border-radius: 2px; }

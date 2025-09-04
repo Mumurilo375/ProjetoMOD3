@@ -1,7 +1,2 @@
- /vendor
- # arquivos gerados/teste
- /public/posthtml.php
- /public/teste.php
- # arquivo temporário adicionado localmente
- public/tentandoImprimirACapa.php
->>>>>>> 8ea4a66 (Corrige Filme::$capa para nullable e ajusta posthtml para enviar film_poster)
+/vendor
+.env
