@@ -149,9 +149,9 @@ a:hover { filter: brightness(1.1); }
 .reels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; height: 520px; overflow: hidden; }
 .reel { display: grid; gap: 12px; }
 .reel > img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; border: 1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
-.reel.anim1 { animation: scrollY 24s linear infinite; }
-.reel.anim2 { animation: scrollY 24s linear infinite reverse; }
-.reel.anim3 { animation: scrollY 24s linear infinite; }
+.reel.anim1 { animation: scrollY 12s linear infinite; }
+.reel.anim2 { animation: scrollY 12s linear infinite reverse; }
+.reel.anim3 { animation: scrollY 12s linear infinite; }
 .reel:hover { animation-play-state: paused; }
 @keyframes scrollY { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
