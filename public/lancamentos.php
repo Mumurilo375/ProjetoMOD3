@@ -67,10 +67,10 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
             <div class="content">
               <h3>
                 <strong><?= htmlspecialchars($filme->getTitulo()) ?></strong>
-                (<?= (int)$filme->getAnoLancamento() ?>)
                 - <span class="genre"><?= htmlspecialchars($filme->getGenero()) ?></span>
               </h3>
               <p class="overview"><?= nl2br(htmlspecialchars($filme->getSinopse())) ?></p>
+              <div class="meta-year"><?= (int)$filme->getAnoLancamento() ?></div>
             </div>
             <div class="score-col">
               <?php if ($score !== null): ?>

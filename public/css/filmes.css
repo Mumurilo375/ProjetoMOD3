@@ -12,6 +12,7 @@
 .content h3 { margin:0 0 6px; font-size:18px; }
 .content .genre { color:hsl(var(--muted-foreground)); }
 .content .overview { margin: 0 0 10px; color:hsl(var(--muted-foreground)); }
+.meta-year { font-size:12px; color:hsl(var(--muted-foreground)); opacity:.9; margin-top:4px; }
 /* ações removidas */
 
 .score-col { display:grid; align-content:center; justify-items:center; }
