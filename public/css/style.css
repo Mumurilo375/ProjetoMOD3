@@ -63,10 +63,10 @@ a:hover { filter: brightness(1.1); }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 0.4px; }
 .brand a { color: hsl(var(--foreground)); }
 .nav { display: flex; gap: 14px; align-items: center; }
-.nav a { color: hsl(var(--foreground)); opacity: 0.9; padding: 6px 8px; border-radius: 6px; position: relative; transition: opacity .15s ease, color .15s ease; }
-.nav a::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 2px; height: 2px; background: hsl(var(--muted-foreground) / .35); border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform .18s ease; }
-.nav a:hover { opacity: 1; }
-.nav a:hover::after { transform: scaleX(1); background: hsl(var(--primary)); }
+.nav a:not(.btn) { color: hsl(var(--foreground)); opacity: 0.9; padding: 6px 8px; border-radius: 6px; position: relative; transition: opacity .15s ease, color .15s ease; }
+.nav a:not(.btn)::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 2px; height: 2px; background: hsl(var(--muted-foreground) / .35); border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform .18s ease; }
+.nav a:not(.btn):hover { opacity: 1; }
+.nav a:not(.btn):hover::after { transform: scaleX(1); background: hsl(var(--primary)); }
 .nav a:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
 .brand a:focus-visible, .btn:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
 
@@ -200,6 +200,8 @@ footer nav { display: flex; gap: 16px; }
 
 /* User menu */
 .user { position: relative; }
+.user .user-btn { display:inline-flex; align-items:center; gap:8px; }
+.user .user-btn svg { opacity:.9; }
 .user-menu { position: absolute; right: 0; top: 110%; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 12px; padding: 8px; width: 220px; box-shadow: var(--shadow-elev); display: none; }
 .user-menu a, .user-menu button { display: block; width: 100%; text-align: left; padding: 10px 12px; color: hsl(var(--foreground)); background: transparent; border: 0; border-radius: 8px; cursor: pointer; }
 .user-menu a:hover, .user-menu button:hover { background: hsl(var(--muted)); }

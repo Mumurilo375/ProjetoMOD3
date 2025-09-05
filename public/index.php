@@ -64,20 +64,7 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
 
 
 
-<header class="site-header">
-    <div class="inner container">
-  <div class="brand"><a href="/static/index.html" aria-label="Home"><img src="img/LogoStarRate.png" alt="Logo StarRate"/></a></div>
-      
-      <nav class="nav">
-        <a href="/static/movies.html">Filmes</a>
-        <a href="/static/series.html">Lançamentos</a>
-      </nav>
-      <div class="nav">
-        <a class="btn btn-ghost" href="auth.php">Login</a>
-        <a class="btn btn-primary" href="auth.php?view=signup">Sign up</a>
-      </div>
-    </div>
-  </header>
+<?php include __DIR__ . '/partials/header.php'; ?>
 
 
 

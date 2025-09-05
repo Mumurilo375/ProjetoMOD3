@@ -18,6 +18,8 @@ class Database
     public static function getEntityManager(): EntityManager
     {
         if (!isset(self::$entityManager)) {
+            // Define timezone padrão para evitar datas/horas em UTC
+            \date_default_timezone_set('America/Sao_Paulo');
             self::$entityManager = new EntityManager(
                 self::getConnection(), 
                 self::getConfig()

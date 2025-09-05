@@ -3,6 +3,8 @@
 
 // 1. Carrega o Autoload do Composer
 require_once "vendor/autoload.php";
+// Timezone da aplicação (horário de Brasília)
+\date_default_timezone_set('America/Sao_Paulo');
 
 // 2. Importa as classes necessárias do Doctrine
 use Doctrine\DBAL\DriverManager;

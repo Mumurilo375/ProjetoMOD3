@@ -16,6 +16,9 @@ class User
     #[Id, Column(name: "id"), GeneratedValue]
     private int $id;
 
+    // Nível de acesso: 'user' (padrão) ou 'admin'
+    #[Column(name: "nivelAcesso", options: ["default" => "user"])]
+    private string $nivelAcesso;
 
     #[Column]
     private string $nome;
@@ -29,6 +32,8 @@ class User
     #[Column(type: "datetime")]
     private DateTime $dataCadastro;
 
+    
+
 
     public function __construct(string $nome, string $email, string $senhaPura)
     {
@@ -39,6 +44,9 @@ class User
 
         // Define a data de cadastro para o momento exato da criação do objeto.
         $this->dataCadastro = new DateTime();
+
+        // Por padrão, todo novo usuário é comum
+        $this->nivelAcesso = 'user';
     }
 
     public function setSenha(string $senhaPura): void
@@ -62,6 +70,17 @@ class User
 	public function getSenha(): string {return $this->senha;}
 
 	public function getDataCadastro(): DateTime {return $this->dataCadastro;}
+
+    // Formata a data de cadastro no padrão brasileiro por conveniência
+    public function getDataCadastroBR(): string {
+        return $this->dataCadastro->format('d-m-Y');
+    }
+    public function getDataCadastroBRComHora(): string {
+        return $this->dataCadastro->format('d-m-Y H:i');
+    }
+
+    public function getNivelAcesso(): string { return $this->nivelAcesso; }
+    public function isAdmin(): bool { return strtolower($this->nivelAcesso) === 'admin'; }
 
 	// Persiste a entidade no banco usando o EntityManager do Doctrine
     public function save(): void

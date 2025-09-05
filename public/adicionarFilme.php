@@ -1,10 +1,30 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+// Bloqueia acesso se não estiver logado ou não for admin
+if (!isset($_SESSION['user_id'])) {
+    header('Location: auth.php?view=login&err=auth');
+    exit;
+}
+
+// Em ambientes simples vamos consultar o banco para garantir papel atualizado
+require_once __DIR__ . '/../vendor/autoload.php';
+use App\Core\Database;
+use App\Model\User;
+try {
+    $em = Database::getEntityManager();
+    $user = $em->find(User::class, (int)$_SESSION['user_id']);
+    if (!$user || !$user->isAdmin()) {
+        header('Location: error.php?code=403');
+        exit;
+    }
+} catch (Throwable $e) {
+    header('Location: error.php?code=403');
+    exit;
+}
 // Página de testes para criar filmes e listar (exemplo de POST/Redirect/GET)
 // PRG: evita reenvio de formulário quando o usuário recarrega a página.
 
 use App\Model\Filme;
-
-require_once __DIR__ . '/../vendor/autoload.php';
 
 $caminhoDaCapa = '';
 
@@ -82,6 +102,7 @@ $filmes = Filme::findAll();
     <link rel="stylesheet" href="css/adicionar.css">
 </head>
 <body class="adicionar">
+    <?php include __DIR__ . '/partials/header.php'; ?>
     <div class="container-add">
         <div class="card-add">
             <h1>Adicionar filme</h1>
