@@ -74,8 +74,20 @@ function badgeTier(?int $score): string {
       <section class="card">
         <div class="row" style="justify-content:space-between; align-items:center;">
           <div class="row" style="align-items:center; gap:12px;">
-            <span class="avatar big" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"/></svg>
+            <span class="avatar big" aria-hidden="true" style="overflow:hidden;">
+              <?php if ($user->getFotoPerfil()): ?>
+                <?php
+                  $fotoPerfil = $user->getFotoPerfil();
+                  $srcPerfil = $fotoPerfil;
+                  if (str_starts_with($fotoPerfil, '/ProjetoMOD3-limpo/public/img/fotoPerfil/')) {
+                    $fsPerfil = __DIR__ . str_replace('/ProjetoMOD3-limpo/public', '', $fotoPerfil);
+                    if (is_file($fsPerfil)) { $srcPerfil .= '?v=' . @filemtime($fsPerfil); }
+                  }
+                ?>
+                <img src="<?= htmlspecialchars($srcPerfil) ?>" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;" />
+              <?php else: ?>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"/></svg>
+              <?php endif; ?>
             </span>
             <div>
               <h1 style="margin:0;"><?= htmlspecialchars($user->getNome()) ?></h1>
@@ -113,32 +125,50 @@ function badgeTier(?int $score): string {
 
     </div>
   </main>
-  <!-- Modal para editar nome -->
+  <!-- Modal para editar perfil (nome e foto) -->
   <div id="edit-name-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close></div>
     <div class="modal-content" role="document">
       <button class="modal-close" aria-label="Fechar" data-close>&times;</button>
-      <form method="post" action="/ProjetoMOD3-limpo/public/atualizarPerfil.php" style="display:grid; gap:12px;">
-        <header>
-          <h2 style="margin:0;">Editar nome</h2>
-        </header>
-        <div>
-          <label for="edit-nome" class="label">Nome</label>
-          <input id="edit-nome" name="nome" type="text" value="<?= htmlspecialchars($user->getNome()) ?>" required style="width:100%; padding:10px; border:1px solid hsl(var(--border)); border-radius:8px; background:hsl(var(--background));" />
-        </div>
-        <footer style="display:flex; gap:8px; justify-content:flex-end;">
-          <button class="btn btn-ghost" type="button" data-close>Cancelar</button>
-          <button class="btn btn-primary" type="submit">Salvar</button>
-        </footer>
-      </form>
+      <header>
+        <h2 style="margin:0;">Editar perfil</h2>
+      </header>
+      <div style="display:grid; gap:16px; margin-top:8px;">
+        <section style="display:grid; gap:12px;">
+          <form method="post" action="/ProjetoMOD3-limpo/public/atualizarPerfil.php" style="display:grid; gap:12px;">
+            <div>
+              <label for="edit-nome" class="label">Nome</label>
+              <input id="edit-nome" name="nome" type="text" value="<?= htmlspecialchars($user->getNome()) ?>" required style="width:100%; padding:10px; border:1px solid hsl(var(--border)); border-radius:8px; background:hsl(var(--background));" />
+            </div>
+            <div style="display:flex; gap:8px; justify-content:flex-end;">
+              <button class="btn btn-ghost" type="button" data-close>Cancelar</button>
+              <button class="btn btn-primary" type="submit">Salvar</button>
+            </div>
+          </form>
+        </section>
+        <hr style="border:0; border-top:1px solid hsl(var(--border));" />
+        <section style="display:grid; gap:12px;">
+          <form method="post" action="/ProjetoMOD3-limpo/public/atualizarFotoPerfil.php" enctype="multipart/form-data" style="display:grid; gap:12px;">
+            <div>
+              <label class="label" for="foto">Foto de perfil</label>
+              <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp" required />
+              <small style="color:hsl(var(--muted-foreground));">Formatos: JPG, PNG, WEBP. Máx 2MB.</small>
+            </div>
+            <div style="display:flex; gap:8px; justify-content:flex-end;">
+              <button class="btn btn-primary" type="submit">Enviar</button>
+            </div>
+          </form>
+        </section>
+      </div>
     </div>
   </div>
   <script>
   (function(){
     const modal = document.getElementById('edit-name-modal');
-    if(!modal) return;
+    if (!modal) return;
     const closeEls = modal.querySelectorAll('[data-close]');
-    closeEls.forEach(el=>el.addEventListener('click', ()=>modal.setAttribute('aria-hidden','true')));
+    const close = () => { modal.setAttribute('aria-hidden','true'); };
+    closeEls.forEach(el => el.addEventListener('click', close));
     window.openNameModal = function(){ modal.setAttribute('aria-hidden','false'); };
   })();
   </script>

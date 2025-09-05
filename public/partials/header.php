@@ -51,12 +51,38 @@ $userRoleNorm = strtolower($userRole);
       <?php else: ?>
         <div class="user">
           <button type="button" class="btn btn-ghost user-btn" aria-haspopup="menu" aria-expanded="false" aria-label="Abrir menu do usuário">
-            <!-- Avatar com anel especial para admin -->
-            <span class="avatar<?= $userRoleNorm === 'admin' ? ' admin' : '' ?>" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"/>
-              </svg>
+            <!-- Avatar (foto de perfil se houver) -->
+            <span class="avatar<?= $userRoleNorm === 'admin' ? ' admin' : '' ?>" aria-hidden="true" style="display:inline-flex; align-items:center; justify-content:center; border-radius:999px;">
+              <?php
+                $foto = $_SESSION['user_foto'] ?? null;
+                if (!$foto) {
+                  // Tenta buscar do banco uma vez e cachear
+                  try {
+                    require_once __DIR__ . '/../../vendor/autoload.php';
+                    $em = \App\Core\Database::getEntityManager();
+                    $u = $em->find(\App\Model\User::class, (int)$_SESSION['user_id']);
+                    if ($u && $u->getFotoPerfil()) {
+                      $foto = $u->getFotoPerfil();
+                      $_SESSION['user_foto'] = $foto;
+                    }
+                  } catch (\Throwable $e) { /* ignore */ }
+                }
+              ?>
+              <?php if ($foto): ?>
+                <?php
+                  $src = $foto;
+                  if (str_starts_with($foto, '/ProjetoMOD3-limpo/public/img/fotoPerfil/')) {
+                    $fs = __DIR__ . str_replace('/ProjetoMOD3-limpo/public', '', $foto);
+                    if (is_file($fs)) { $src .= '?v=' . @filemtime($fs); }
+                  }
+                ?>
+                <img src="<?= htmlspecialchars($src) ?>" alt="Avatar" style="width:100%; height:100%; object-fit:cover;" />
+              <?php else: ?>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4"/>
+                  <path d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"/>
+                </svg>
+              <?php endif; ?>
             </span>
             <span class="user-name"><?= htmlspecialchars($userName) ?></span>
           </button>

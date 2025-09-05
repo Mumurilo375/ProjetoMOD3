@@ -32,6 +32,10 @@ class User
     #[Column(type: "datetime")]
     private DateTime $dataCadastro;
 
+    // Caminho relativo da foto de perfil (ex: /ProjetoMOD3-limpo/public/img/fotoPerfil/abc123.jpg)
+    #[Column(nullable: true)]
+    private ?string $fotoPerfil = null;
+
     
 
 
@@ -78,6 +82,9 @@ class User
         }
         $this->nome = $nome;
     }
+
+    public function getFotoPerfil(): ?string { return $this->fotoPerfil; }
+    public function setFotoPerfil(?string $path): void { $this->fotoPerfil = $path; }
 
     // Formata a data de cadastro no padrão brasileiro por conveniência
     public function getDataCadastroBR(): string {
