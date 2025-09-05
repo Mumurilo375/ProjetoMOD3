@@ -83,7 +83,7 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
     <div class="container hero-grid">
       <section>
         <h1>Descubra, avalie e compartilhe sua paixão por cinema e séries</h1>
-        <p>Notas em estrelas, comentários e tendências em um só lugar. Comece agora.</p>
+  <p>Notas de 0 a 100, comentários e tendências em um só lugar. Comece agora.</p>
         <form class="search js-search-form" aria-label="Buscar filmes">
           <input name="q" type="search" placeholder="Busque por títulos de filmes" aria-label="Pesquisar filmes" />
           <button class="btn btn-primary" type="submit">Buscar</button>
@@ -103,7 +103,20 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
           foreach ($filmesComLoop1 as $filme):
           ?>
 
-          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+          <figure class="poster-wrap">
+            <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+            <?php 
+              $mid = \App\Model\Avaliacao::getMediaPorFilmeId($filme->getId());
+              if ($mid !== null):
+                $score = (int)round($mid);
+                $tier = $score >= 70 ? 'score-high' : ($score >= 40 ? 'score-mid' : 'score-low');
+            ?>
+              <div class="score score-badge <?= $tier ?>">
+                <span class="label">MÉDIA</span>
+                <span class="value"><?= $score ?></span>
+              </div>
+            <?php endif; ?>
+          </figure>
 
 
           <?php 
@@ -118,7 +131,20 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
           foreach ($filmesComLoop2 as $filme):
           ?>
 
-          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+          <figure class="poster-wrap">
+            <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+            <?php 
+              $mid = \App\Model\Avaliacao::getMediaPorFilmeId($filme->getId());
+              if ($mid !== null):
+                $score = (int)round($mid);
+                $tier = $score >= 70 ? 'score-high' : ($score >= 40 ? 'score-mid' : 'score-low');
+            ?>
+              <div class="score score-badge <?= $tier ?>">
+                <span class="label">MÉDIA</span>
+                <span class="value"><?= $score ?></span>
+              </div>
+            <?php endif; ?>
+          </figure>
 
 
           <?php 
@@ -133,7 +159,20 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
           foreach ($filmesComLoop3 as $filme):
           ?>
 
-          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+          <figure class="poster-wrap">
+            <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+            <?php 
+              $mid = \App\Model\Avaliacao::getMediaPorFilmeId($filme->getId());
+              if ($mid !== null):
+                $score = (int)round($mid);
+                $tier = $score >= 70 ? 'score-high' : ($score >= 40 ? 'score-mid' : 'score-low');
+            ?>
+              <div class="score score-badge <?= $tier ?>">
+                <span class="label">MÉDIA</span>
+                <span class="value"><?= $score ?></span>
+              </div>
+            <?php endif; ?>
+          </figure>
 
 
           <?php
@@ -167,7 +206,7 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
 
     <section class="section" style="background:hsl(var(--card) / 0.3); border-block:1px solid hsl(var(--border));">
       <div class="container grid cols-3">
-        <div class="card"><h3 style="margin:0 0 6px;">Avaliações confiáveis</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Atribua notas em estrelas e comentários que ajudam a comunidade a decidir o que assistir.</p></div>
+  <div class="card"><h3 style="margin:0 0 6px;">Avaliações confiáveis</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Atribua notas de 0 a 100 e comentários que ajudam a comunidade a decidir o que assistir.</p></div>
         <div class="card"><h3 style="margin:0 0 6px;">Listas e favoritos</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Organize sua experiência com listas personalizadas e favoritos.</p></div>
   <div class="card"><h3 style="margin:0 0 6px;">Exploração inteligente</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Use a busca para encontrar filmes que importam pra você.</p></div>
       </div>

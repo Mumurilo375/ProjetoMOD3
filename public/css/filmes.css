@@ -1,0 +1,27 @@
+/* Página de filmes (lista) */
+.page-title { font-family:"Space Grotesk", Inter, system-ui; font-size:36px; margin:0 0 16px; }
+
+.movie-search { display:flex; gap:10px; margin: 10px 0 20px; }
+.movie-search input { flex:1; height:44px; border-radius:12px; border:1px solid hsl(var(--border)); background:hsl(var(--background)); color:hsl(var(--foreground)); padding:0 12px; }
+
+.movie-list { list-style:none; margin:0; padding:0; display:grid; gap:22px; }
+.movie-item { display:grid; grid-template-columns: 110px 1fr auto; gap:16px; align-items:start; background:hsl(var(--card) / .35); border:1px solid hsl(var(--border)); border-radius:14px; padding:14px; }
+
+.poster img { width:110px; height:165px; object-fit:cover; border-radius:10px; border:1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
+
+.content h3 { margin:0 0 6px; font-size:18px; }
+.content .genre { color:hsl(var(--muted-foreground)); }
+.content .overview { margin: 0 0 10px; color:hsl(var(--muted-foreground)); }
+/* ações removidas */
+
+.score-col { display:grid; align-content:center; justify-items:center; }
+.score-card { background: hsl(var(--background)); border:1px solid hsl(var(--border)); border-radius:12px; padding:10px; display:grid; gap:8px; justify-items:center; min-width:96px; }
+.rate-btn { background:hsl(0 0% 10%); color:hsl(var(--foreground)); border-color:hsl(0 0% 10%); }
+.no-score { opacity:.7; }
+.no-score-text { color:hsl(var(--muted-foreground)); font-size:12px; }
+
+@media (max-width: 720px) {
+  .movie-item { grid-template-columns: 80px 1fr; }
+  .poster img { width:80px; height:120px; }
+  .score-col { grid-column: 1 / -1; justify-items:flex-start; }
+}

@@ -18,7 +18,7 @@ class Avaliacao
     private int $id;
 
     #[Column(type: "integer")]
-    private int $nota; // Ex: Uma nota de 1 a 5
+    private int $nota; // Nota de 0 a 100
 
     // Comentários podem ser opcionais, então permitimos que seja nulo (nullable: true)
     #[Column(type: "text", nullable: true)]
@@ -55,7 +55,7 @@ class Avaliacao
     {
         $this->usuario = $usuario;
         $this->filme = $filme;
-        $this->nota = $nota;
+        $this->setNota($nota);
         $this->comentario = $comentario;
         $this->dataAvaliacao = new DateTime();
     }
@@ -63,6 +63,12 @@ class Avaliacao
     // --- Getters ---
     public function getId(): int { return $this->id; }
     public function getNota(): int { return $this->nota; }
+    public function setNota(int $nota): void {
+        // Garante faixa 0..100
+        if ($nota < 0) { $nota = 0; }
+        if ($nota > 100) { $nota = 100; }
+        $this->nota = $nota;
+    }
     public function getComentario(): ?string { return $this->comentario; }
     public function getDataAvaliacao(): DateTime { return $this->dataAvaliacao; }
     public function getUsuario(): User { return $this->usuario; }
@@ -81,6 +87,38 @@ class Avaliacao
         $em = Database::getEntityManager();
         $repository = $em->getRepository(self::class);
         return $repository->findAll();
+    }
+
+    /**
+     * Retorna a média das notas (0..100) para um filme ou null se não houver avaliações.
+     */
+    public static function getMediaPorFilmeId(int $filmeId): ?float
+    {
+        $em = Database::getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('AVG(a.nota) AS media', 'COUNT(a.id) AS total')
+           ->from(self::class, 'a')
+           ->where('a.filme = :fid')
+           ->setParameter('fid', $filmeId);
+        $res = $qb->getQuery()->getSingleResult();
+        $total = (int)($res['total'] ?? 0);
+        if ($total === 0) return null;
+        return (float)$res['media'];
+    }
+
+    /**
+     * Retorna o número de avaliações de um filme.
+     */
+    public static function getContagemPorFilmeId(int $filmeId): int
+    {
+        $em = Database::getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('COUNT(a.id) AS total')
+           ->from(self::class, 'a')
+           ->where('a.filme = :fid')
+           ->setParameter('fid', $filmeId);
+        $res = $qb->getQuery()->getSingleScalarResult();
+        return (int)$res;
     }
 
 

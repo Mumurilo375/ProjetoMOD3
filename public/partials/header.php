@@ -40,8 +40,8 @@ $userRoleNorm = strtolower($userRole);
     <div class="brand"><a href="/ProjetoMOD3-limpo/public/index.php" aria-label="Home"><img src="/ProjetoMOD3-limpo/public/img/LogoStarRate.png" alt="Logo StarRate"/></a></div>
 
     <nav class="nav">
-      <a href="/static/movies.html">Filmes</a>
-      <a href="/static/series.html">Lançamentos</a>
+  <a href="/ProjetoMOD3-limpo/public/filmes.php">Filmes</a>
+  <a href="/ProjetoMOD3-limpo/public/lancamentos.php">Lançamentos</a>
     </nav>
 
     <div class="nav">

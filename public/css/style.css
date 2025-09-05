@@ -104,6 +104,18 @@ a:hover { filter: brightness(1.1); }
 .rating-mid { background: hsl(var(--rating-mid)); color: hsl(var(--secondary-foreground)); }
 .rating-low { background: hsl(var(--rating-low)); color: hsl(210 20% 94%); }
 
+/* Nota 0–100 badge */
+.score-badge { display:inline-grid; place-items:center; min-width:46px; height:46px; padding:6px 8px; border-radius:12px; background:hsl(120 50% 15% / .2); border:1px solid hsl(120 45% 35% / .35); box-shadow: 0 2px 8px hsl(0 0% 0% / .25); }
+.score-badge .label { font-size:10px; letter-spacing:.6px; font-weight:700; color:hsl(120 45% 65%); margin-top:-2px; }
+.score-badge .value { font-size:20px; line-height:1; font-weight:800; color:hsl(124 42% 52%); }
+.score-high { --score-h:124; --score-s:42%; --score-l:52%; background:hsl(var(--score-h) var(--score-s) calc(var(--score-l) - 40%) / .2); border-color:hsl(var(--score-h) var(--score-s) calc(var(--score-l) - 10%) / .55); }
+.score-mid  { --score-h:45;  --score-s:87%; --score-l:56%; background:hsl(var(--score-h) var(--score-s) 20% / .2); border-color:hsl(var(--score-h) var(--score-s) 40% / .55); }
+.score-low  { --score-h:0;   --score-s:72%; --score-l:50%; background:hsl(var(--score-h) var(--score-s) 12% / .2); border-color:hsl(var(--score-h) var(--score-s) 36% / .55); }
+
+.poster-wrap { position:relative; }
+.poster-wrap img { display:block; width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:12px; border:1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
+.poster-wrap .score { position:absolute; left:8px; top:8px; }
+
 /* Hero */
 .hero { padding: 48px 0 64px; position: relative; background-color: transparent; overflow: hidden; }
 
@@ -154,6 +166,9 @@ a:hover { filter: brightness(1.1); }
 .reels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; height: 520px; overflow: hidden; }
 .reel { display: grid; gap: 12px; }
 .reel > img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; border: 1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
+.reel .poster-wrap { width:100%; margin:0; }
+.reel .poster-wrap img { width:100%; height:auto; aspect-ratio:2/3; object-fit:cover; display:block; border-radius:12px; border:1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
+.reel .poster-wrap .score { left:8px; top:8px; }
 .reel.anim1 { animation: scrollY 12s linear infinite; }
 .reel.anim2 { animation: scrollY 12s linear infinite reverse; }
 .reel.anim3 { animation: scrollY 12s linear infinite; }
