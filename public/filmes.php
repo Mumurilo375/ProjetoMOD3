@@ -62,12 +62,14 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
             $tier = $score !== null ? scoreTier($score) : '';
           ?>
           <li class="movie-item">
-            <div class="poster">
+            <a class="poster" href="/ProjetoMOD3-limpo/public/filme.php?id=<?= (int)$filme->getId() ?>" aria-label="Ver detalhes de <?= htmlspecialchars($filme->getTitulo()) ?>">
               <img src="<?= htmlspecialchars($filme->getCapa()) ?>" alt="Capa de <?= htmlspecialchars($filme->getTitulo()) ?>" />
-            </div>
+            </a>
             <div class="content">
               <h3>
-                <strong><?= htmlspecialchars($filme->getTitulo()) ?></strong>
+                <a class="movie-title-link" href="/ProjetoMOD3-limpo/public/filme.php?id=<?= (int)$filme->getId() ?>">
+                  <strong><?= htmlspecialchars($filme->getTitulo()) ?></strong>
+                </a>
                 - <span class="genre"><?= htmlspecialchars($filme->getGenero()) ?></span>
               </h3>
               <p class="overview"><?= nl2br(htmlspecialchars($filme->getSinopse())) ?></p>

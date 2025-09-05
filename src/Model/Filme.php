@@ -32,8 +32,12 @@ class Filme
     #[Column]
     private string $capa; //ex: public/img/interestelar.jpg
 
+    // Link opcional para trailer do YouTube (pode ser URL completa)
+    #[Column(nullable: true)]
+    private ?string $trailer = null;
 
-    public function __construct(string $titulo, string $sinopse, int $anoLancamento, string $diretor, string $genero, string $capa)
+
+    public function __construct(string $titulo, string $sinopse, int $anoLancamento, string $diretor, string $genero, string $capa, ?string $trailer = null)
     {
         $this->titulo = $titulo;
         $this->sinopse = $sinopse;
@@ -41,6 +45,7 @@ class Filme
         $this->diretor = $diretor;
         $this->genero = $genero;
         $this->capa = $capa;
+        $this->trailer = $trailer ? trim($trailer) : null;
     }
 
     public function getId(): int {return $this->id;}
@@ -56,6 +61,12 @@ class Filme
 	public function getGenero(): string {return $this->genero;}
 
 	public function getCapa(): string {return $this->capa;}
+
+    public function getTrailer(): ?string { return $this->trailer; }
+    public function setTrailer(?string $url): void {
+        $url = $url !== null ? trim($url) : null;
+        $this->trailer = $url ?: null;
+    }
 
     // Persiste a entidade no banco usando o EntityManager do Doctrine
     public function save(): void

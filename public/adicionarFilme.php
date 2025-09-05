@@ -27,6 +27,7 @@ try {
 use App\Model\Filme;
 
 $caminhoDaCapa = '';
+$_trailer = null;
 
 
 
@@ -68,6 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ano = intval($_POST['film_anoLancamento'] ?? 0);
     $diretor = trim($_POST['film_diretor'] ?? '');
     $genero = trim($_POST['film_genero'] ?? '');
+    $_trailer = isset($_POST['film_trailer']) ? trim((string)$_POST['film_trailer']) : null;
+    if ($_trailer === '') { $_trailer = null; }
 
     // construtor de Filme aceita (titulo, sinopse, ano, capa)
     $filme = new Filme(
@@ -76,7 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ano,
         diretor: $diretor,
         genero: $genero,
-        capa: $caminhoDaCapa //aqui usamos o nome do arquivo enviado via upload
+        capa: $caminhoDaCapa, //aqui usamos o nome do arquivo enviado via upload
+        trailer: $_trailer
     );
 
     
@@ -152,6 +156,11 @@ $filmes = Filme::findAll();
             </div>
 
             <div class="form-row full">
+                <label>Link do Trailer (YouTube)</label>
+                <input type="url" name="film_trailer" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+
+            <div class="form-row full">
                 <label>Capa do Filme</label>
                 <input type="file" name="film_capa" accept="image/png, image/jpeg, image/webp">
             </div>
@@ -172,6 +181,7 @@ $filmes = Filme::findAll();
                 <th>Ano</th>
                 <th>Gênero</th>
                 <th>Diretor</th>
+                <th>Trailer</th>
             </tr>
         </thead>
         <tbody>
@@ -187,6 +197,7 @@ $filmes = Filme::findAll();
                 <td><?= htmlspecialchars($filme->getAnoLancamento()) ?></td>
                 <td><?= htmlspecialchars($filme->getGenero()) ?></td>
                 <td><?= htmlspecialchars($filme->getDiretor()) ?></td>
+                <td><?= htmlspecialchars((string)($filme->getTrailer() ?? '')) ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
