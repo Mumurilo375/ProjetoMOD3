@@ -59,12 +59,15 @@ a:hover { filter: brightness(1.1); }
 /* Header */
 .site-header { position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(140%) blur(10px); background: hsl(var(--header) / 0.7); box-shadow: var(--shadow-soft); border-bottom: 1px solid hsl(var(--border)); }
 .site-header .inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; }
-.brand img { height: 32px; display: block; }
+.brand img { height: 36px; display: block; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 0.4px; }
 .brand a { color: hsl(var(--foreground)); }
 .nav { display: flex; gap: 14px; align-items: center; }
-.nav a { color: hsl(var(--foreground)); opacity: 0.9; padding: 6px 8px; border-radius: 8px; transition: background .2s ease, opacity .2s ease; }
-.nav a:hover, .nav a:focus-visible { opacity: 1; background: hsl(var(--muted) / 0.25); }
+.nav a { color: hsl(var(--foreground)); opacity: 0.9; padding: 6px 8px; border-radius: 6px; position: relative; transition: opacity .15s ease, color .15s ease; }
+.nav a::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 2px; height: 2px; background: hsl(var(--muted-foreground) / .35); border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform .18s ease; }
+.nav a:hover { opacity: 1; }
+.nav a:hover::after { transform: scaleX(1); background: hsl(var(--primary)); }
+.nav a:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
 .brand a:focus-visible, .btn:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
 
 /* Buttons */
@@ -72,19 +75,21 @@ a:hover { filter: brightness(1.1); }
 .btn:hover { transform: translateY(-1px); }
 .btn:active { transform: translateY(0); }
 .btn-primary {
-  background: linear-gradient(180deg, hsl(45 87% 60%), hsl(45 87% 56%));
+  background: linear-gradient(180deg, hsl(45 87% 58%), hsl(45 87% 52%));
   color: hsl(var(--primary-foreground));
-  border-color: hsl(45 87% 56%);
-  box-shadow: 0 4px 12px hsl(45 87% 56% / 0.25);
+  border-color: hsl(45 87% 50% / .9);
+  box-shadow: 0 2px 8px hsl(45 87% 45% / 0.18);
   font-weight: 600;
 }
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px hsl(45 87% 56% / 0.28);
+  filter: brightness(1.03);
+  box-shadow: 0 4px 10px hsl(45 87% 45% / 0.2);
 }
 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px hsl(45 87% 56% / 0.2);
+  filter: none;
+  box-shadow: 0 1px 4px hsl(45 87% 45% / 0.18);
 }
 .btn-secondary { background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground)); border-color: hsl(var(--secondary)); }
 .btn-ghost { background: transparent; color: hsl(var(--foreground)); }

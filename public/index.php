@@ -116,7 +116,7 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
           foreach ($filmesComLoop1 as $filme):
           ?>
 
-          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" loading="lazy">
+          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
 
 
           <?php 
@@ -131,7 +131,7 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
           foreach ($filmesComLoop2 as $filme):
           ?>
 
-          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" loading="lazy">
+          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
 
 
           <?php 
@@ -146,7 +146,7 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
           foreach ($filmesComLoop3 as $filme):
           ?>
 
-          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" loading="lazy">
+          <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
 
 
           <?php
