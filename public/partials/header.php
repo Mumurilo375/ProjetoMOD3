@@ -51,12 +51,14 @@ $userRoleNorm = strtolower($userRole);
       <?php else: ?>
         <div class="user">
           <button type="button" class="btn btn-ghost user-btn" aria-haspopup="menu" aria-expanded="false" aria-label="Abrir menu do usuário">
-            <!-- Avatar SVG simples -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <circle cx="12" cy="8" r="4"/>
-              <path d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"/>
-            </svg>
-            <span><?= htmlspecialchars($userName) ?></span>
+            <!-- Avatar com anel especial para admin -->
+            <span class="avatar<?= $userRoleNorm === 'admin' ? ' admin' : '' ?>" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"/>
+              </svg>
+            </span>
+            <span class="user-name"><?= htmlspecialchars($userName) ?></span>
           </button>
           <div class="user-menu" role="menu">
             <a href="#" role="menuitem">Perfil</a>
