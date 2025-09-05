@@ -32,11 +32,15 @@ class Database
     private static function getConfig(): Configuration
     {
         $paths = [__DIR__ . '/../Model'];
-        $isDevMode = false;
+        // Em desenvolvimento, habilite geração automática de proxies
+        $isDevMode = true;
+        $proxyDir = __DIR__ . '/../../var/proxies';
+        if (!is_dir($proxyDir)) { @mkdir($proxyDir, 0777, true); }
 
         return ORMSetup::createAttributeMetadataConfiguration(
-            $paths, 
-            $isDevMode
+            $paths,
+            $isDevMode,
+            $proxyDir
         );
     }
 

@@ -10,8 +10,13 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[Entity]
+#[Table(name: "Avaliacao", uniqueConstraints: [
+    new UniqueConstraint(name: "uniq_usuario_filme", columns: ["usuario_id", "filme_id"])
+])]
 class Avaliacao
 {
     #[Id, Column(type: "integer"), GeneratedValue]
@@ -34,12 +39,12 @@ class Avaliacao
     
     
     /* Muitas avaliações pertencem a Um user. */
-    #[ManyToOne(targetEntity: User::class, inversedBy: "avaliacoes")]
+    #[ManyToOne(targetEntity: User::class)]
     #[JoinColumn(name: "usuario_id", referencedColumnName: "id")]
     private User $usuario;
 
     /* Muitas avaliações pertencem a Um filme. */
-    #[ManyToOne(targetEntity: Filme::class, inversedBy: "avaliacoes")]
+    #[ManyToOne(targetEntity: Filme::class)]
     #[JoinColumn(name: "filme_id", referencedColumnName: "id")]
     private Filme $filme;
 
@@ -142,4 +147,17 @@ class Avaliacao
         return $repository->findBy(['filme' => $filmeId]);
     }
     // Como usar: Quando um usuário estiver na página do filme "Interestelar" (que tem, digamos, o ID 15), você pode chamar Avaliacao::findByFilmeId(15); para pegar só as avaliações daquele filme e exibi-las na página.
+
+    /**
+     * Localiza uma avaliação específica de um usuário para um filme.
+     * Útil para impedir múltiplas avaliações do mesmo usuário no mesmo filme.
+     */
+    public static function findOneByUserAndFilme(User $usuario, Filme $filme): ?self
+    {
+        $em = Database::getEntityManager();
+        $repo = $em->getRepository(self::class);
+        /** @var self|null $avaliacao */
+        $avaliacao = $repo->findOneBy(['usuario' => $usuario, 'filme' => $filme]);
+        return $avaliacao;
+    }
 }

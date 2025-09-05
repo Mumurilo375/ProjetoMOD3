@@ -61,8 +61,8 @@ $userRoleNorm = strtolower($userRole);
             <span class="user-name"><?= htmlspecialchars($userName) ?></span>
           </button>
           <div class="user-menu" role="menu">
-            <a href="#" role="menuitem">Perfil</a>
-            <a href="#" role="menuitem">Minhas avaliações</a>
+            <a href="/ProjetoMOD3-limpo/public/perfil.php" role="menuitem">Perfil</a>
+            <a href="/ProjetoMOD3-limpo/public/minhas-avaliacoes.php" role="menuitem">Minhas avaliações</a>
             <a href="#" role="menuitem">Coleções</a>
             <?php if ($userRoleNorm === 'admin'): ?>
               <a href="/ProjetoMOD3-limpo/public/adicionarFilme.php" role="menuitem">Adicionar</a>

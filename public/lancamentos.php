@@ -72,19 +72,19 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
               <p class="overview"><?= nl2br(htmlspecialchars($filme->getSinopse())) ?></p>
               <div class="meta-year"><?= (int)$filme->getAnoLancamento() ?></div>
             </div>
-            <div class="score-col">
+    <div class="score-col">
               <?php if ($score !== null): ?>
                 <div class="score-card <?= $tier ?>">
                   <div class="score-badge <?= $tier ?>">
                     <span class="label">MÉDIA</span>
                     <span class="value"><?= $score ?></span>
                   </div>
-                  <a class="btn rate-btn" href="#">Avaliar</a>
+      <button class="btn rate-btn" type="button" onclick='openRateModal({id: <?= (int)$filme->getId() ?>, titulo: <?= json_encode($filme->getTitulo()) ?>, capa: <?= json_encode($filme->getCapa()) ?>, ano: <?= (int)$filme->getAnoLancamento() ?>, genero: <?= json_encode($filme->getGenero()) ?>})'>Avaliar</button>
                 </div>
               <?php else: ?>
                 <div class="score-card no-score">
                   <span class="no-score-text">Sem notas</span>
-                  <a class="btn rate-btn" href="#">Avaliar</a>
+      <button class="btn rate-btn" type="button" onclick='openRateModal({id: <?= (int)$filme->getId() ?>, titulo: <?= json_encode($filme->getTitulo()) ?>, capa: <?= json_encode($filme->getCapa()) ?>, ano: <?= (int)$filme->getAnoLancamento() ?>, genero: <?= json_encode($filme->getGenero()) ?>})'>Avaliar</button>
                 </div>
               <?php endif; ?>
             </div>
@@ -94,5 +94,6 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
 
     </div>
   </main>
+  <?php include __DIR__ . '/partials/rate_modal.php'; ?>
 </body>
 </html>

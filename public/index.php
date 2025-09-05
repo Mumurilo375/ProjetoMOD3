@@ -105,17 +105,6 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
 
           <figure class="poster-wrap">
             <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
-            <?php 
-              $mid = \App\Model\Avaliacao::getMediaPorFilmeId($filme->getId());
-              if ($mid !== null):
-                $score = (int)round($mid);
-                $tier = $score >= 70 ? 'score-high' : ($score >= 40 ? 'score-mid' : 'score-low');
-            ?>
-              <div class="score score-badge <?= $tier ?>">
-                <span class="label">MÉDIA</span>
-                <span class="value"><?= $score ?></span>
-              </div>
-            <?php endif; ?>
           </figure>
 
 
@@ -133,17 +122,6 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
 
           <figure class="poster-wrap">
             <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
-            <?php 
-              $mid = \App\Model\Avaliacao::getMediaPorFilmeId($filme->getId());
-              if ($mid !== null):
-                $score = (int)round($mid);
-                $tier = $score >= 70 ? 'score-high' : ($score >= 40 ? 'score-mid' : 'score-low');
-            ?>
-              <div class="score score-badge <?= $tier ?>">
-                <span class="label">MÉDIA</span>
-                <span class="value"><?= $score ?></span>
-              </div>
-            <?php endif; ?>
           </figure>
 
 
@@ -161,17 +139,6 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
 
           <figure class="poster-wrap">
             <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
-            <?php 
-              $mid = \App\Model\Avaliacao::getMediaPorFilmeId($filme->getId());
-              if ($mid !== null):
-                $score = (int)round($mid);
-                $tier = $score >= 70 ? 'score-high' : ($score >= 40 ? 'score-mid' : 'score-low');
-            ?>
-              <div class="score score-badge <?= $tier ?>">
-                <span class="label">MÉDIA</span>
-                <span class="value"><?= $score ?></span>
-              </div>
-            <?php endif; ?>
           </figure>
 
 

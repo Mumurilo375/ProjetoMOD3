@@ -71,6 +71,14 @@ class User
 
 	public function getDataCadastro(): DateTime {return $this->dataCadastro;}
 
+    public function setNome(string $nome): void {
+        $nome = trim($nome);
+        if ($nome === '') {
+            throw new \InvalidArgumentException('Nome não pode ser vazio');
+        }
+        $this->nome = $nome;
+    }
+
     // Formata a data de cadastro no padrão brasileiro por conveniência
     public function getDataCadastroBR(): string {
         return $this->dataCadastro->format('d-m-Y');

@@ -242,3 +242,25 @@ footer nav { display: flex; gap: 16px; }
 .stars { display: inline-flex; gap: 6px; cursor: pointer; }
 .star { font-size: 20px; color: hsl(var(--muted-foreground)); }
 .star.active { color: hsl(var(--rating-high)); }
+
+/* Modal de avaliação */
+.modal[aria-hidden="true"] { display: none; }
+.modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+.modal-content { position: relative; background: hsl(var(--card)); color: hsl(var(--card-foreground)); border:1px solid hsl(var(--border)); border-radius: 14px; box-shadow: var(--shadow-elev); width: min(940px, 92vw); max-height: 90vh; overflow: auto; padding: 16px; }
+.modal-close { position: absolute; top: 8px; right: 10px; background: transparent; color: hsl(var(--muted-foreground)); border:0; font-size: 26px; cursor:pointer; }
+
+.rate-header { padding: 6px 8px 12px; border-bottom: 1px solid hsl(var(--border)); }
+.rate-title { margin:0; font-size: 22px; font-weight: 700; }
+
+.rate-body { display:grid; grid-template-columns: 180px 1fr; gap:16px; padding: 14px 8px; }
+.rate-left img { width: 180px; height: 270px; object-fit: cover; border-radius: 12px; border:1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
+.rate-meta { margin-top: 8px; }
+.rate-meta .meta-year, .rate-meta .meta-genre { color:hsl(var(--muted-foreground)); font-size:13px; }
+.meta-genre { margin-top: 4px; }
+
+.rate-right .field { display:grid; gap:6px; margin: 10px 0 12px; }
+.rate-right input[type="number"], .rate-right textarea { border-radius: 12px; border:1px solid hsl(var(--border)); background: hsl(var(--background)); color:hsl(var(--foreground)); padding: 10px 12px; }
+.rate-right input[type="number"] { max-width: 160px; }
+
+.rate-footer { display:flex; justify-content:flex-end; gap:10px; padding: 6px 8px 8px; border-top: 1px solid hsl(var(--border)); }
