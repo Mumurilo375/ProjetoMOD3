@@ -19,6 +19,15 @@
 .seg.active { background:hsl(var(--muted) / .35); }
 .seg:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset: 2px; }
 
+/* Mesma posição visual das abas entre login/signup (telas médias/grandes) */
+@media (min-width: 641px) {
+  .auth-card { min-height: 520px; display: flex; flex-direction: column; }
+}
+
+/* Padroniza a altura das abas (evita variação de linha) */
+.segmented { align-items: center; }
+.seg { height: 44px; display: flex; align-items: center; justify-content: center; }
+
 /* Campos */
 .field { display:grid; gap:6px; margin: 12px 0 14px; }
 .field label { font-size: 13px; color: hsl(var(--muted-foreground)); }
@@ -33,5 +42,5 @@
 
 /* Responsivo */
 @media (max-width: 640px) {
-  .auth-card { padding: 20px; }
+  .auth-card { padding: 20px; min-height: unset; }
 }

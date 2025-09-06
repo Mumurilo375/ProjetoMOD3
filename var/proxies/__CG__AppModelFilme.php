@@ -29,6 +29,7 @@ class Filme extends \App\Model\Filme implements \Doctrine\ORM\Proxy\InternalProx
         "\0".parent::class."\0".'id' => [parent::class, 'id', null, 16],
         "\0".parent::class."\0".'sinopse' => [parent::class, 'sinopse', null, 16],
         "\0".parent::class."\0".'titulo' => [parent::class, 'titulo', null, 16],
+        "\0".parent::class."\0".'trailer' => [parent::class, 'trailer', null, 16],
         'anoLancamento' => [parent::class, 'anoLancamento', null, 16],
         'capa' => [parent::class, 'capa', null, 16],
         'diretor' => [parent::class, 'diretor', null, 16],
@@ -36,6 +37,7 @@ class Filme extends \App\Model\Filme implements \Doctrine\ORM\Proxy\InternalProx
         'id' => [parent::class, 'id', null, 16],
         'sinopse' => [parent::class, 'sinopse', null, 16],
         'titulo' => [parent::class, 'titulo', null, 16],
+        'trailer' => [parent::class, 'trailer', null, 16],
     ];
 
     public function __isInitialized(): bool

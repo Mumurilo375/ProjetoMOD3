@@ -74,7 +74,9 @@ function srcPublic(string $path): string {
     .poster { border-radius: 12px; overflow:hidden; border:1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
     .poster img { width:100%; height:auto; display:block; }
     .side { display:grid; gap:12px; align-content:start; }
-    .btn-trailer { display:flex; align-items:center; justify-content:center; gap:10px; padding:12px 14px; border-radius:12px; border:1px solid hsl(var(--border)); background:hsl(var(--muted)); color:hsl(var(--foreground)); cursor:default; font-size:16px; }
+  .btn-trailer { display:flex; align-items:center; justify-content:center; gap:10px; padding:12px 14px; border-radius:12px; border:1px solid hsl(var(--border)); background:hsl(var(--muted)); color:hsl(var(--foreground)); cursor:pointer; font-size:16px; transition: transform .16s ease, box-shadow .16s ease, filter .16s ease; }
+  .btn-trailer:hover { transform: translateY(-1px); filter: brightness(1.05); box-shadow: var(--shadow-soft); }
+  .btn-trailer:active { transform: translateY(0); filter: brightness(1); box-shadow: none; }
 
     .movie-header { display:grid; gap:8px; }
     .movie-title { margin:0; font-size: 44px; line-height:1.08; font-weight:800; }
@@ -124,7 +126,7 @@ function srcPublic(string $path): string {
               <span>•</span>
               <span><?= htmlspecialchars($filme->getGenero()) ?></span>
               <span>•</span>
-              <span>Dir.: <?= htmlspecialchars($filme->getDiretor()) ?></span>
+              <span>Diretor(a): <?= htmlspecialchars($filme->getDiretor()) ?></span>
             </div>
             <p class="movie-syn"><?= nl2br(htmlspecialchars($filme->getSinopse())) ?></p>
           </div>
@@ -196,13 +198,13 @@ function srcPublic(string $path): string {
   ?>
   <div id="trailer-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close></div>
-    <div class="modal-content" role="document" style="width:min(900px,92vw);">
+  <div class="modal-content" role="document" style="width:min(1100px,96vw);">
       <button class="modal-close" aria-label="Fechar" data-close>&times;</button>
       <header class="rate-header"><h2 class="rate-title" style="margin:0;">Trailer</h2></header>
       <div style="padding:12px;">
         <?php if ($embedSrc): ?>
           <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid hsl(var(--border));">
-            <iframe id="yt-frame" src="<?= htmlspecialchars($embedSrc) ?>" title="Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"></iframe>
+            <iframe id="yt-frame" data-src="<?= htmlspecialchars($embedSrc) ?>" title="Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"></iframe>
           </div>
         <?php else: ?>
           <p style="margin:0;">Nenhum trailer cadastrado para este filme.</p>
@@ -216,11 +218,22 @@ function srcPublic(string $path): string {
       var modal = document.getElementById('trailer-modal');
       if(!btn || !modal) return;
       var closeEls = modal.querySelectorAll('[data-close]');
-      function open(){ modal.setAttribute('aria-hidden','false'); }
-      function close(){ modal.setAttribute('aria-hidden','true');
-        // pausa o vídeo removendo src e recolocando (evita áudio tocando)
+      function open(){
+        modal.setAttribute('aria-hidden','false');
+        // carrega o vídeo apenas ao abrir
         var f = document.getElementById('yt-frame');
-        if(f){ var s=f.getAttribute('src'); f.setAttribute('src', s); }
+        if(f && !f.getAttribute('src')){
+          var s = f.getAttribute('data-src');
+          if(s) f.setAttribute('src', s);
+        }
+      }
+      function close(){
+        modal.setAttribute('aria-hidden','true');
+        // descarrega o iframe para pausar áudio/vídeo
+        var f = document.getElementById('yt-frame');
+        if(f && f.getAttribute('src')){
+          f.setAttribute('src', '');
+        }
       }
       btn.addEventListener('click', open);
       closeEls.forEach(function(el){ el.addEventListener('click', close); });

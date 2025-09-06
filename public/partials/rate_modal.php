@@ -1,5 +1,7 @@
 <?php
 // Modal reutilizável para avaliar filmes (nota 0..100 + comentário)
+if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+$__USER_LOGGED = isset($_SESSION['user_id']);
 ?>
 <div id="rate-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
   <div class="modal-backdrop" data-close></div>
@@ -46,8 +48,36 @@
   if(!modal) return;
   const closeEls = modal.querySelectorAll('[data-close]');
   closeEls.forEach(el=>el.addEventListener('click', ()=>modal.setAttribute('aria-hidden','true')));
+  
+  // Modal de login requerido
+  const loginReq = document.createElement('div');
+  loginReq.id = 'login-required-modal';
+  loginReq.className = 'modal';
+  loginReq.setAttribute('aria-hidden', 'true');
+  loginReq.setAttribute('role', 'dialog');
+  loginReq.setAttribute('aria-modal', 'true');
+  loginReq.innerHTML = `
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-content" role="document">
+      <button class="modal-close" aria-label="Fechar" data-close>&times;</button>
+      <div style="padding:8px 4px 6px;">
+        <h3 style="margin:0 0 10px;">Faça login para avaliar</h3>
+        <p style="margin:0 0 14px; color:hsl(var(--muted-foreground));">Você precisa estar logado para dar nota e escrever um comentário.</p>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <a class="btn" href="/ProjetoMOD3-limpo/public/auth.php?view=login">Login</a>
+          <a class="btn btn-primary" href="/ProjetoMOD3-limpo/public/auth.php?view=signup">Criar conta</a>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(loginReq);
+  loginReq.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click', ()=>loginReq.setAttribute('aria-hidden','true')));
 
   function openRateModal(data){
+    const isLogged = <?php echo $__USER_LOGGED ? 'true' : 'false'; ?>;
+    if (!isLogged) {
+      loginReq.setAttribute('aria-hidden','false');
+      return;
+    }
     modal.setAttribute('aria-hidden','false');
     document.getElementById('rate-filme-id').value = data.id;
     document.getElementById('rate-filme-titulo').textContent = data.titulo || '';

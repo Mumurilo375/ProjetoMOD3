@@ -14,18 +14,37 @@ $repo = $em->getRepository(Filme::class);
 
 $q = trim($_GET['q'] ?? '');
 
-// Busca simples por título quando houver q; caso contrário, lista todos, mais recentes primeiro
+// Paginação
+$page = max(1, (int)($_GET['page'] ?? 1));
+$pageSize = 7;
+
+// QueryBuilder: selecionar filmes e ordenar pela média das avaliações (desc)
+$qb = $em->createQueryBuilder();
+$qb->select('f')
+   ->from(Filme::class, 'f')
+   ->leftJoin(\App\Model\Avaliacao::class, 'a', 'WITH', 'a.filme = f')
+   ->groupBy('f.id');
+
 if ($q !== '') {
-    $qb = $em->createQueryBuilder();
-    $qb->select('f')
-       ->from(Filme::class, 'f')
-       ->where($qb->expr()->like('LOWER(f.titulo)', ':q'))
-       ->setParameter('q', '%' . strtolower($q) . '%')
-       ->orderBy('f.id', 'DESC');
-    $filmes = $qb->getQuery()->getResult();
-} else {
-    $filmes = $repo->findBy([], ['id' => 'DESC']);
+    $qb->where($qb->expr()->like('LOWER(f.titulo)', ':q'))
+       ->setParameter('q', '%' . strtolower($q) . '%');
 }
+
+// ordenar pela média das notas (filmes sem notas ficam por último)
+$qb->orderBy('AVG(a.nota)', 'DESC');
+
+// total para paginação
+$countQb = $em->createQueryBuilder();
+$countQb->select('COUNT(f.id)')
+  ->from(Filme::class, 'f');
+if ($q !== '') {
+    $countQb->where($countQb->expr()->like('LOWER(f.titulo)', ':q'))
+      ->setParameter('q', '%' . strtolower($q) . '%');
+}
+$total = (int)$countQb->getQuery()->getSingleScalarResult();
+
+$qb->setFirstResult(($page - 1) * $pageSize)->setMaxResults($pageSize);
+$filmes = $qb->getQuery()->getResult();
 
 function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($score >= 40 ? 'score-mid' : 'score-low'); }
 ?>
@@ -61,8 +80,8 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
             $score = $mid !== null ? (int)round($mid) : null;
             $tier = $score !== null ? scoreTier($score) : '';
           ?>
-          <li class="movie-item">
-            <a class="poster" href="/ProjetoMOD3-limpo/public/filme.php?id=<?= (int)$filme->getId() ?>" aria-label="Ver detalhes de <?= htmlspecialchars($filme->getTitulo()) ?>">
+          <li class="movie-item" data-href="/ProjetoMOD3-limpo/public/filme.php?id=<?= (int)$filme->getId() ?>" tabindex="0" aria-label="Ver detalhes de <?= htmlspecialchars($filme->getTitulo()) ?>">
+            <a class="poster" href="/ProjetoMOD3-limpo/public/filme.php?id=<?= (int)$filme->getId() ?>">
               <img src="<?= htmlspecialchars($filme->getCapa()) ?>" alt="Capa de <?= htmlspecialchars($filme->getTitulo()) ?>" />
             </a>
             <div class="content">
@@ -94,9 +113,45 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
           </li>
         <?php endforeach; ?>
       </ul>
+      <div class="pagination" style="display:flex; gap:8px; margin-top:18px; align-items:center;">
+        <?php if ($page > 1): ?>
+          <a class="btn btn-ghost" href="?q=<?= urlencode($q) ?>&page=<?= $page - 1 ?>">Anterior</a>
+        <?php endif; ?>
+        <div style="color:hsl(var(--muted-foreground));">Página <?= $page ?> de <?= max(1, ceil($total / $pageSize)) ?></div>
+        <?php if ($page * $pageSize < $total): ?>
+          <a class="btn btn-ghost" href="?q=<?= urlencode($q) ?>&page=<?= $page + 1 ?>">Próximos</a>
+        <?php endif; ?>
+      </div>
 
     </div>
   </main>
   <?php include __DIR__ . '/partials/rate_modal.php'; ?>
+  <script>
+    // Tornar todo o .movie-item clicável: clicar ou pressionar Enter navega para data-href.
+    (function(){
+      function isInteractive(el){
+        if(!el) return false;
+        const tag = el.tagName && el.tagName.toLowerCase();
+        if(!tag) return false;
+        return ['a','button','input','select','textarea','label'].includes(tag) || el.closest('a, button, [role="button"]');
+      }
+      document.addEventListener('click', function(e){
+        const item = e.target.closest('.movie-item');
+        if(!item) return;
+        // se o clique foi em um link ou botão interno, não sobrescrever
+        if(isInteractive(e.target)) return;
+        const href = item.getAttribute('data-href');
+        if(href) location.href = href;
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key !== 'Enter') return;
+        const active = document.activeElement;
+        if(active && active.classList && active.classList.contains('movie-item')){
+          const href = active.getAttribute('data-href');
+          if(href) location.href = href;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

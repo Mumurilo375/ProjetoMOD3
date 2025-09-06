@@ -14,16 +14,25 @@
 .poster img { width:110px; height:165px; object-fit:cover; border-radius:10px; border:1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); transition: transform .18s ease, filter .18s ease; }
 .poster:hover img { transform: scale(1.03); filter: brightness(1.05); }
 
+/* Tornar todo o container do filme interativo ao passar o mouse */
+.movie-item { cursor: default; }
+.movie-item:hover { cursor: pointer; }
+/* aplicar efeito de destaque da capa quando o mouse estiver sobre todo o item */
+.movie-item:hover .poster img { transform: scale(1.03); filter: brightness(1.05); }
+
 .content h3 { margin:0 0 6px; font-size:18px; }
-.content h3 .movie-title-link { color: hsl(var(--foreground)); text-decoration: none; position:relative; }
-.content h3 .movie-title-link:hover { color: hsl(var(--primary)); }
+.content h3 .movie-title-link { color: hsl(var(--foreground)); text-decoration: none; position:relative; display:inline-block; padding:15px 10px; margin:-6px -8px; border-radius:8px; }
+.content h3 .movie-title-link:hover { color: inherit; }
 .content .genre { color:hsl(var(--muted-foreground)); }
 .content .overview { margin: 0 0 10px; color:hsl(var(--muted-foreground)); }
+.content .overview { display:-webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow:hidden; line-clamp: 3; }
 .meta-year { font-size:12px; color:hsl(var(--muted-foreground)); opacity:.9; margin-top:4px; }
 /* ações removidas */
 
 .score-col { display:grid; align-content:center; justify-items:center; }
 .score-card { background: hsl(var(--background)); border:1px solid hsl(var(--border)); border-radius:12px; padding:10px; display:grid; gap:8px; justify-items:center; min-width:96px; }
+.score-card { transition: transform .16s ease, box-shadow .16s ease; }
+.score-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-soft); }
 .rate-btn { background:hsl(0 0% 10%); color:hsl(var(--foreground)); border-color:hsl(0 0% 10%); }
 .no-score { opacity:.7; }
 .no-score-text { color:hsl(var(--muted-foreground)); font-size:12px; }

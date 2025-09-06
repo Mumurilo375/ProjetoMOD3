@@ -123,7 +123,7 @@ $filmes = Filme::findAll();
         <div class="form-grid">
             <div class="form-row">
                 <label>Título</label>
-                <input type="text" name="film_titulo" required>
+                <input type="text" name="film_titulo" required autocomplete="off">
             </div>
             <div class="form-row">
                 <label>Ano de Lançamento</label>
@@ -152,12 +152,13 @@ $filmes = Filme::findAll();
                     <option value="Românce">Românce</option>
                     <option value="Drama">Drama</option>
                     <option value="Guerra">Guerra</option>
+                    <option value="Guerra">Crime</option>
                 </select>
             </div>
 
             <div class="form-row full">
                 <label>Link do Trailer (YouTube)</label>
-                <input type="url" name="film_trailer" placeholder="https://www.youtube.com/watch?v=...">
+                <input type="url" name="film_trailer" autocomplete="off">
             </div>
 
             <div class="form-row full">

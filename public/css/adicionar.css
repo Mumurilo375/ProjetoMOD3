@@ -7,8 +7,8 @@ body.adicionar { background: linear-gradient(180deg, #071018 0%, #0b0b0b 100%); 
 .form-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; align-items:start; }
 .form-row{ display:flex; flex-direction:column; gap:6px; }
 label{ font-size:13px; color:var(--muted); }
-input[type='text'], textarea{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text); padding:10px 12px; border-radius:8px; }
-input[type='text'], input[type='number'], textarea {
+input[type='text'], input[type='url'], textarea{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text); padding:10px 12px; border-radius:8px; }
+input[type='text'], input[type='number'], input[type='url'], textarea {
 	background: rgba(255,255,255,0.02);
 	border: 1px solid rgba(255,255,255,0.06);
 	color: var(--text);
@@ -16,19 +16,43 @@ input[type='text'], input[type='number'], textarea {
 	border-radius: 8px;
 	transition: background 0.2s, box-shadow 0.2s;
 }
-input[type='text']:focus, input[type='number']:focus, textarea:focus {
+input[type='text']:focus, input[type='number']:focus, input[type='url']:focus, textarea:focus {
 	outline: 2px solid rgba(47,184,111,0.12);
 	box-shadow: 0 4px 14px rgba(47,184,111,0.06);
 	background: rgba(255,255,255,0.04);
 }
-input[type='text']:not(:focus), input[type='number']:not(:focus), textarea:not(:focus) {
+input[type='text']:not(:focus), input[type='number']:not(:focus), input[type='url']:not(:focus), textarea:not(:focus) {
 	background: rgba(255,255,255,0.02);
+}
+/* Evita que o navegador aplique uma cor/borda diferente em URL inválido */
+input[type='url']:invalid {
+	background: rgba(255,255,255,0.02);
+	border-color: rgba(255,255,255,0.06);
+	box-shadow: none;
+}
+/* Placeholder consistente entre campos */
+input[type='text']::placeholder,
+input[type='number']::placeholder,
+input[type='url']::placeholder,
+textarea::placeholder {
+	color: rgba(233, 238, 240, 0.55); /* var(--text) com opacidade */
 }
 select.form-select { background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); color:var(--text); padding:10px 12px; border-radius:8px; appearance:none; -webkit-appearance:none; }
 select.form-select option{ background: var(--card); color: var(--text); }
 select.form-select:focus{ outline: 2px solid rgba(47,184,111,0.12); box-shadow: 0 4px 14px rgba(47,184,111,0.06); }
 textarea{ resize:vertical; min-height:110px; }
 .full{ grid-column: 1 / -1; }
+/* Força o campo de URL a ter o mesmo visual dos demais (alguns navegadores aplicam estilo nativo diferente) */
+.container-add input[type='url'] {
+	-webkit-appearance: none;
+	appearance: none;
+	background: rgba(255,255,255,0.02);
+	border: 1px solid rgba(255,255,255,0.06);
+	color: var(--text);
+	padding: 10px 12px;
+	border-radius: 8px;
+	box-shadow: none;
+}
 .form-row.full input[type='file'] {
 	display: block;
 	width: 100%;
@@ -85,6 +109,39 @@ textarea{ resize:vertical; min-height:110px; }
 .btn-save:hover{ filter: brightness(.95); transform: translateY(-1px); }
 .btn-save:active{ filter: brightness(.9); transform: translateY(0); }
 
+/* Uniformiza TODOS os controles do grid (evita variações do navegador) */
+.form-grid input[type='text'],
+.form-grid input[type='number'],
+.form-grid input[type='url'],
+.form-grid textarea,
+.form-grid select.form-select {
+	background: rgba(255,255,255,0.02) !important;
+	border: 1px solid rgba(255,255,255,0.06) !important;
+	color: var(--text) !important;
+	padding: 10px 12px;
+	border-radius: 8px;
+}
+
+/* Estados do URL consistentes */
+.form-grid input[type='url']:hover {
+	background: rgba(255,255,255,0.03);
+	border-color: rgba(255,255,255,0.08);
+}
+.form-grid input[type='url']:focus {
+	outline: 2px solid rgba(47,184,111,0.12);
+	box-shadow: 0 4px 14px rgba(47,184,111,0.06);
+	background: rgba(255,255,255,0.04) !important;
+}
+
+/* Neutraliza cor amarela/cinza do autofill (Chrome/Edge) */
+.form-grid input[type='url']:-webkit-autofill,
+.form-grid input[type='url']:-webkit-autofill:hover,
+.form-grid input[type='url']:-webkit-autofill:focus {
+	-webkit-text-fill-color: var(--text);
+	transition: background-color 9999s ease-in-out 0s;
+	box-shadow: 0 0 0px 1000px rgba(255,255,255,0.02) inset;
+}
+
 .lista-title{ text-align: center; margin-top: 18px; }
 .table-wrap{ margin-top:18px; overflow:auto; }
 table{ width:100%; border-collapse:collapse; font-size:14px; }
@@ -93,3 +150,28 @@ thead th{ color:var(--muted); font-weight:600; font-size:13px; }
 @media (max-width:720px){ .form-grid{ grid-template-columns: 1fr; } }
 
 hr { border: none; height: 3px; background: hsl(194 82% 22% / .22); margin: 20px 0; border-radius: 2px; }
+
+/* Reforço final: campo específico do Link do Trailer */
+body.adicionar input[name='film_trailer'] {
+	-webkit-appearance: none;
+	appearance: none;
+	background: rgba(255,255,255,0.02) !important;
+	border: 1px solid rgba(255,255,255,0.06) !important;
+	color: var(--text) !important;
+	padding: 10px 12px !important;
+	border-radius: 8px !important;
+	box-shadow: none !important;
+	background-clip: padding-box !important;
+}
+body.adicionar input[name='film_trailer']:focus {
+	outline: 2px solid rgba(47,184,111,0.12) !important;
+	box-shadow: 0 4px 14px rgba(47,184,111,0.06) !important;
+	background: rgba(255,255,255,0.04) !important;
+}
+body.adicionar input[name='film_trailer']:-webkit-autofill,
+body.adicionar input[name='film_trailer']:-webkit-autofill:hover,
+body.adicionar input[name='film_trailer']:-webkit-autofill:focus {
+	-webkit-text-fill-color: var(--text) !important;
+	transition: background-color 9999s ease-in-out 0s !important;
+	box-shadow: 0 0 0px 1000px rgba(255,255,255,0.02) inset !important;
+}
