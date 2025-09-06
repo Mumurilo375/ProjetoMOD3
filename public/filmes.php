@@ -113,15 +113,29 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
           </li>
         <?php endforeach; ?>
       </ul>
-      <div class="pagination" style="display:flex; gap:8px; margin-top:18px; align-items:center;">
-        <?php if ($page > 1): ?>
-          <a class="btn btn-ghost" href="?q=<?= urlencode($q) ?>&page=<?= $page - 1 ?>">Anterior</a>
-        <?php endif; ?>
-        <div style="color:hsl(var(--muted-foreground));">Página <?= $page ?> de <?= max(1, ceil($total / $pageSize)) ?></div>
-        <?php if ($page * $pageSize < $total): ?>
-          <a class="btn btn-ghost" href="?q=<?= urlencode($q) ?>&page=<?= $page + 1 ?>">Próximos</a>
-        <?php endif; ?>
-      </div>
+
+      <?php if (count($filmes) === 0): ?>
+        <div class="card" style="margin-top:18px; text-align:center;">
+          <h3 style="margin:0 0 8px;">Nenhum filme encontrado</h3>
+          <?php if ($q !== ''): ?>
+            <p style="margin:0; color:hsl(var(--muted-foreground));">Não encontramos resultados para "<?= htmlspecialchars($q) ?>". Tente outra palavra-chave ou volte à lista completa.</p>
+            <div style="margin-top:12px;"><a class="btn" href="/ProjetoMOD3-limpo/public/filmes.php">Ver todos os filmes</a></div>
+          <?php else: ?>
+            <p style="margin:0; color:hsl(var(--muted-foreground));">Ainda não há filmes cadastrados.</p>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+      <?php if ($total > 0 && count($filmes) > 0): ?>
+        <div class="pagination" style="display:flex; gap:8px; margin-top:18px; align-items:center;">
+          <?php if ($page > 1): ?>
+            <a class="btn btn-ghost" href="?q=<?= urlencode($q) ?>&page=<?= $page - 1 ?>">Anterior</a>
+          <?php endif; ?>
+          <div style="color:hsl(var(--muted-foreground));">Página <?= $page ?> de <?= max(1, ceil($total / $pageSize)) ?></div>
+          <?php if ($page * $pageSize < $total): ?>
+            <a class="btn btn-ghost" href="?q=<?= urlencode($q) ?>&page=<?= $page + 1 ?>">Próximos</a>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
 
     </div>
   </main>

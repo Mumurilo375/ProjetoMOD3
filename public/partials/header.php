@@ -34,15 +34,53 @@ if ($loggedIn) {
 
 // Normaliza para comparação case-insensitive
 $userRoleNorm = strtolower($userRole);
+// Página atual (nome do arquivo) para marcar item ativo
+$currentPage = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 ?>
 <header class="site-header">
   <div class="inner container">
     <div class="brand"><a href="/ProjetoMOD3-limpo/public/index.php" aria-label="Home"><img src="/ProjetoMOD3-limpo/public/img/LogoStarRate.png" alt="Logo StarRate"/></a></div>
 
-    <nav class="nav">
-  <a href="/ProjetoMOD3-limpo/public/filmes.php">Filmes</a>
-  <a href="/ProjetoMOD3-limpo/public/lancamentos.php">Lançamentos</a>
+    <nav class="nav" aria-label="Menu principal">
+      <style>
+        /* destaca item ativo igual ao hover (underline) */
+        .site-header .nav > a.active { opacity: 1; }
+        .site-header .nav > a.active::after { transform: scaleX(1); background: hsl(var(--primary)); }
+        /* classe temporária enquanto o item é hoverado (visual igual ao active) */
+        .site-header .nav > a.hover-active { opacity: 1; }
+        .site-header .nav > a.hover-active::after { transform: scaleX(1); background: hsl(var(--primary)); }
+        /* quando outro item está hoverado, o original pode ficar inativo visualmente */
+        .site-header .nav > a.inactive { opacity: 0.6; }
+        .site-header .nav > a.inactive::after { transform: scaleX(0); }
+      </style>
+      <a href="/ProjetoMOD3-limpo/public/filmes.php" class="<?= $currentPage === 'filmes.php' ? 'active' : '' ?>">Filmes</a>
+      <a href="/ProjetoMOD3-limpo/public/lancamentos.php" class="<?= $currentPage === 'lancamentos.php' ? 'active' : '' ?>">Lançamentos</a>
     </nav>
+    <script>
+      (function(){
+        var nav = document.currentScript && document.currentScript.previousElementSibling;
+        if(!nav || !nav.classList.contains('nav')) return;
+        var links = Array.from(nav.querySelectorAll('a'));
+        var originalActive = links.find(function(a){ return a.classList.contains('active'); });
+        links.forEach(function(a){
+          a.addEventListener('mouseenter', function(){
+            // acender hovered e escurecer o original sem remover a classe server-side
+            if (originalActive && originalActive !== a) originalActive.classList.add('inactive');
+            a.classList.add('hover-active');
+          });
+          a.addEventListener('mouseleave', function(){
+            a.classList.remove('hover-active');
+            if (originalActive && originalActive !== a) originalActive.classList.remove('inactive');
+          });
+          a.addEventListener('click', function(){
+            // marca este como novo original (visual imediato); server-side manterá no reload
+            links.forEach(function(x){ x.classList.remove('active'); x.classList.remove('inactive'); });
+            a.classList.add('active');
+            originalActive = a;
+          });
+        });
+      })();
+    </script>
 
     <div class="nav">
       <?php if (!$loggedIn): ?>

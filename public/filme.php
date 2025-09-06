@@ -74,9 +74,13 @@ function srcPublic(string $path): string {
     .poster { border-radius: 12px; overflow:hidden; border:1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
     .poster img { width:100%; height:auto; display:block; }
     .side { display:grid; gap:12px; align-content:start; }
-  .btn-trailer { display:flex; align-items:center; justify-content:center; gap:10px; padding:12px 14px; border-radius:12px; border:1px solid hsl(var(--border)); background:hsl(var(--muted)); color:hsl(var(--foreground)); cursor:pointer; font-size:16px; transition: transform .16s ease, box-shadow .16s ease, filter .16s ease; }
+  .btn-trailer { display:flex; align-items:center; justify-content:center; gap:10px; padding:12px 14px; border-radius:12px; border:1px solid hsl(var(--border)); background:hsl(var(--muted)); color:hsl(var(--foreground)); cursor:pointer; font-size:16px; transition: transform .16s ease, box-shadow .16s ease, filter .16s ease; width:100%; max-width:300px; }
   .btn-trailer:hover { transform: translateY(-1px); filter: brightness(1.05); box-shadow: var(--shadow-soft); }
   .btn-trailer:active { transform: translateY(0); filter: brightness(1); box-shadow: none; }
+  /* wrapper para o botão de trailer e o botão de voltar circular abaixo (centralizado) */
+  .trailer-wrap { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .back-circle { width:40px; height:40px; border-radius:50%; background:#ffd400; border:2px solid #000; display:inline-grid; place-items:center; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.12); }
+  .back-circle svg { width:18px; height:18px; fill:#000; transform: rotate(0deg); }
 
     .movie-header { display:grid; gap:8px; }
     .movie-title { margin:0; font-size: 44px; line-height:1.08; font-weight:800; }
@@ -115,7 +119,12 @@ function srcPublic(string $path): string {
           ?>
           <img src="<?= htmlspecialchars($srcCapa) ?>" alt="Capa de <?= htmlspecialchars($filme->getTitulo()) ?>">
         </figure>
-  <button type="button" class="btn-trailer" id="open-trailer">Ver trailer</button>
+  <div class="trailer-wrap">
+    <button type="button" class="btn-trailer" id="open-trailer">Ver trailer</button>
+    <button type="button" class="back-circle" id="btn-go-back" title="Voltar" aria-label="Voltar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5c-.28 0-.53.11-.72.29L8.7 10.58a1 1 0 0 0 0 1.41l4.08 3.79c.39.36 1.02.34 1.4-.05.36-.36.36-.95 0-1.31L11.6 12l3.28-3.15c.36-.34.36-.92 0-1.28-.19-.19-.44-.29-.72-.29z"/></svg>
+    </button>
+  </div>
       </aside>
       <section>
         <div class="header-row">
@@ -237,6 +246,24 @@ function srcPublic(string $path): string {
       }
       btn.addEventListener('click', open);
       closeEls.forEach(function(el){ el.addEventListener('click', close); });
+    })();
+  </script>
+  <script>
+    (function(){
+      var back = document.getElementById('btn-go-back');
+      if(!back) return;
+      back.addEventListener('click', function(e){
+        e.preventDefault();
+        if (window.history && window.history.length > 1) {
+          window.history.back();
+          return;
+        }
+        if (document.referrer) {
+          window.location.href = document.referrer;
+          return;
+        }
+        window.location.href = '/ProjetoMOD3-limpo/public/filmes.php';
+      });
     })();
   </script>
 </body>

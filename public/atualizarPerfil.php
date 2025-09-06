@@ -13,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_SESSION['user_id'])) {
     exit;
 }
 
-$name = trim((string)($_POST['nome'] ?? ''));
-if ($name === '') {
-    header('Location: /ProjetoMOD3-limpo/public/perfil.php?err=nome');
-    exit;
-}
+ $name = trim((string)($_POST['nome'] ?? ''));
+ if ($name === '') {
+     header('Location: /ProjetoMOD3-limpo/public/perfil.php?err=nome');
+     exit;
+ }
 
 try {
     $em = Database::getEntityManager();
@@ -28,7 +28,71 @@ try {
         exit;
     }
 
+    // Atualiza nome
     $user->setNome($name);
+
+    // === Tratamento opcional de foto de perfil ===
+    if (isset($_FILES['foto']) && is_uploaded_file($_FILES['foto']['tmp_name'])) {
+        $file = $_FILES['foto'];
+        $maxSize = 2 * 1024 * 1024; // 2MB
+        $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            header('Location: /ProjetoMOD3-limpo/public/perfil.php?err=upload');
+            exit;
+        }
+        if ($file['size'] > $maxSize) {
+            header('Location: /ProjetoMOD3-limpo/public/perfil.php?err=size');
+            exit;
+        }
+
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($file['tmp_name']);
+        if (!isset($allowed[$mime])) {
+            header('Location: /ProjetoMOD3-limpo/public/perfil.php?err=type');
+            exit;
+        }
+
+        $ext = $allowed[$mime];
+        $baseDir = __DIR__ . '/img/fotoPerfil';
+        if (!is_dir($baseDir)) { @mkdir($baseDir, 0777, true); }
+
+        $slugify = function (string $str): string {
+            $s = $str;
+            if (function_exists('iconv')) {
+                $conv = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
+                if ($conv !== false) { $s = $conv; }
+            }
+            $s = strtolower($s);
+            $s = preg_replace('/[^a-z0-9]+/i', '-', $s) ?? '';
+            $s = trim($s, '-');
+            if ($s === '') { $s = 'usuario'; }
+            if (strlen($s) > 40) { $s = substr($s, 0, 40); }
+            return $s;
+        };
+
+        $nameSlug = $slugify($user->getNome() ?? 'usuario');
+        $filename = 'perfil_' . $nameSlug . '_id-' . $user->getId() . '.' . $ext;
+        $dest = $baseDir . '/' . $filename;
+        $publicPath = '/ProjetoMOD3-limpo/public/img/fotoPerfil/' . $filename;
+
+        $old = $user->getFotoPerfil();
+        if ($old && str_starts_with($old, '/ProjetoMOD3-limpo/public/img/fotoPerfil/')) {
+            $oldFs = __DIR__ . str_replace('/ProjetoMOD3-limpo/public', '', $old);
+            if (realpath($oldFs) !== realpath($dest) && is_file($oldFs)) {
+                @unlink($oldFs);
+            }
+        }
+
+        if (!move_uploaded_file($file['tmp_name'], $dest)) {
+            header('Location: /ProjetoMOD3-limpo/public/perfil.php?err=move');
+            exit;
+        }
+
+        $user->setFotoPerfil($publicPath);
+        $_SESSION['user_foto'] = $publicPath;
+    }
+
     $em->persist($user);
     $em->flush();
 
