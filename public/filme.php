@@ -149,7 +149,7 @@ function srcPublic(string $path): string {
   <h2 style="margin:18px 0 8px;">Avaliações</h2>
         <div class="reviews">
           <?php if (!$avaliacoes): ?>
-            <div class="review-item"><div></div><div>Seja o primeiro a avaliar este filme.</div></div>
+            <button class="no-reviews" type="button" onclick='openRateModal({id: <?= (int)$filme->getId() ?>, titulo: <?= json_encode($filme->getTitulo()) ?>, capa: <?= json_encode($srcCapa) ?>, ano: <?= (int)$filme->getAnoLancamento() ?>, genero: <?= json_encode($filme->getGenero()) ?>})' aria-label="Seja o primeiro a avaliar este filme">Seja o primeiro a avaliar este filme</button>
           <?php else: ?>
             <?php foreach ($avaliacoes as $av): /** @var Avaliacao $av */ ?>
               <?php $u = $av->getUsuario(); /** @var User $u */ ?>
@@ -266,5 +266,6 @@ function srcPublic(string $path): string {
       });
     })();
   </script>
+  <?php include __DIR__ . '/partials/rate_modal.php'; ?>
 </body>
 </html>

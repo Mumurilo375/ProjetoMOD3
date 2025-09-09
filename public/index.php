@@ -84,7 +84,7 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
       <section>
         <h1>Descubra, avalie e compartilhe sua paixão por cinema e séries</h1>
   <p>Notas de 0 a 100, comentários e tendências em um só lugar. Comece agora.</p>
-        <form class="search js-search-form" aria-label="Buscar filmes">
+        <form class="search js-search-form" aria-label="Buscar filmes" method="get" action="filmes.php">
           <input name="q" type="search" placeholder="Busque por títulos de filmes" aria-label="Pesquisar filmes" />
           <button class="btn btn-primary" type="submit">Buscar</button>
         </form>

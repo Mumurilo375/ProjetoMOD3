@@ -37,6 +37,11 @@
 .field select { height: 46px; border-radius: 12px; border: 1px solid hsl(var(--border)); background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 0 12px; }
 .field select:focus { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
 
+/* Mensagens de erro customizadas (campo) */
+.field-error { margin-top:6px; color: hsl(0 72% 70%); font-size:13px; background: hsla(0,72%,50%,0.06); padding:6px 10px; border-radius:8px; border:1px solid hsla(0,72%,60%,0.08); display:none; }
+.field.error .field-error { display:block; }
+.field.error input, .field.error select { border-color: hsla(0,72%,60%,0.18); }
+
 /* Nota */
 .note { margin-top: 12px; color:hsl(var(--muted-foreground)); font-size: 12px; text-align:center; }
 

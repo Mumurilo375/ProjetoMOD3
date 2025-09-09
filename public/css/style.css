@@ -294,3 +294,16 @@ footer nav { display: flex; gap: 16px; }
 .rate-right input[type="number"] { max-width: 160px; }
 
 .rate-footer { display:flex; justify-content:flex-end; gap:10px; padding: 6px 8px 8px; border-top: 1px solid hsl(var(--border)); }
+
+/* Estilo para CTA quando não há avaliações */
+.review-item .rate-btn { display:inline-block; padding:10px 14px; border-radius:10px; background: linear-gradient(180deg, hsl(45 87% 58%), hsl(45 87% 52%)); color: hsl(var(--primary-foreground)); border: 0; box-shadow: 0 6px 18px hsl(45 87% 45% / 0.18); cursor:pointer; font-weight:700; }
+.review-item .rate-btn:hover { transform: translateY(-2px); }
+.review-item .rate-btn:focus { outline: 3px solid hsl(var(--primary)); outline-offset: 2px; }
+.review-item .no-score-text { color: hsl(var(--muted-foreground)); }
+
+/* bloco compacto para quando não há avaliações */
+.no-reviews { background: #2F3841; padding: 10px 14px; border-radius: 12px; display: inline-flex; align-items: center; gap: 12px; font-size: 15px; max-width: fit-content; width: fit-content; color: hsl(var(--foreground)); border: 0; cursor: pointer; }
+.no-reviews:hover { filter: brightness(1.03); transform: translateY(-1px); }
+.no-reviews:focus { outline: 3px solid hsl(var(--primary)); outline-offset: 3px; }
+
+

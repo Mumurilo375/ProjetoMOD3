@@ -127,19 +127,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php endif; ?>
 
       <?php if ($view === 'signup'): ?>
-        <form method="post" autocomplete="off">
+        <form method="post" autocomplete="off" novalidate>
           <input type="hidden" name="action" value="signup" />
           <div class="field">
             <label for="nome">Nome</label>
             <input id="nome" name="nome" type="text" required />
+            <div class="field-error" aria-live="polite"></div>
           </div>
           <div class="field">
             <label for="email">E-mail</label>
             <input id="email" name="email" type="email" required />
+            <div class="field-error" aria-live="polite"></div>
           </div>
           <div class="field">
             <label for="senha">Senha</label>
             <input id="senha" name="senha" type="password" minlength="6" required />
+            <div class="field-error" aria-live="polite"></div>
           </div>
           <div style="display:flex; gap:10px; justify-content:flex-end; margin-top: 8px;">
             <a class="btn btn-ghost" href="?view=login">Já tenho conta</a>
@@ -148,15 +151,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <p class="note">Sua senha será protegida com hash forte (password_hash).</p>
         </form>
       <?php else: ?>
-        <form method="post" autocomplete="off">
+    <form method="post" autocomplete="off" novalidate>
           <input type="hidden" name="action" value="login" />
           <div class="field">
             <label for="email">E-mail</label>
-            <input id="email" name="email" type="email" required />
+      <input id="email" name="email" type="email" required />
+      <div class="field-error" aria-live="polite"></div>
           </div>
           <div class="field">
             <label for="senha">Senha</label>
-            <input id="senha" name="senha" type="password" required />
+      <input id="senha" name="senha" type="password" required />
+      <div class="field-error" aria-live="polite"></div>
           </div>
           <div style="display:flex; gap:10px; justify-content:flex-end; margin-top: 8px;">
             <a class="btn btn-ghost" href="?view=signup">Criar conta</a>
@@ -167,6 +172,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php endif; ?>
     </div>
   </main>
+
+  <script>
+  // Script para mensagens de validação customizadas (substitui tooltips nativos)
+  (function(){
+    function setError(field, message){
+      const container = field.closest('.field');
+      if (!container) return;
+      container.classList.add('error');
+      const errEl = container.querySelector('.field-error');
+      if (errEl) errEl.textContent = message || '';
+    }
+    function clearError(field){
+      const container = field.closest('.field');
+      if (!container) return;
+      container.classList.remove('error');
+      const errEl = container.querySelector('.field-error');
+      if (errEl) errEl.textContent = '';
+    }
+
+    function validateField(field){
+      clearError(field);
+      if (!field.checkValidity()){
+        if (field.validity.valueMissing) return 'Campo obrigatório.';
+        if (field.validity.typeMismatch) return field.type === 'email' ? 'Informe um e-mail válido.' : 'Valor inválido.';
+        if (field.validity.tooShort) return 'Valor muito curto.';
+        return 'Valor inválido.';
+      }
+      return '';
+    }
+
+    document.querySelectorAll('.auth-card form').forEach(form => {
+      // intercept submit
+      form.addEventListener('submit', function(e){
+        let hasError = false;
+        const fields = form.querySelectorAll('input[required], input[minlength]');
+        fields.forEach(f => {
+          const msg = validateField(f);
+          if (msg){ setError(f, msg); hasError = true; }
+        });
+        if (hasError){ e.preventDefault(); return false; }
+        return true;
+      });
+
+      // live validation
+      form.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', () => { clearError(inp); });
+        inp.addEventListener('blur', () => {
+          const msg = validateField(inp);
+          if (msg) setError(inp, msg);
+        });
+      });
+    });
+  })();
+  </script>
 
 </body>
 </html>
