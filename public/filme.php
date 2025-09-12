@@ -143,13 +143,33 @@ function srcPublic(string $path): string {
             <div class="label">Média</div>
             <div class="num <?= badgeTier($mediaInt) ?>"><?= $mediaInt !== null ? $mediaInt : '—' ?></div>
             <div class="label"><?= (int)$total ?> avaliações</div>
+            <?php
+              // Determina se o usuário logado já avaliou este filme
+              $userHasReviewed = false;
+              if (isset($_SESSION['user_id'])) {
+                $currentUser = $em->find(\App\Model\User::class, (int)$_SESSION['user_id']);
+                if ($currentUser) {
+                  $existing = \App\Model\Avaliacao::findOneByUserAndFilme($currentUser, $filme);
+                  $userHasReviewed = $existing !== null;
+                }
+              }
+            ?>
+            <?php if ($userHasReviewed): ?>
+              <div style="margin-top:10px;">
+                <span style="color:hsl(var(--muted-foreground)); padding:8px 10px; border-radius:8px; display:inline-block;">Avaliado</span>
+              </div>
+            <?php else: ?>
+              <div style="margin-top:10px;">
+                <button class="btn btn-primary" type="button" onclick='openRateModal({id: <?= (int)$filme->getId() ?>, titulo: <?= json_encode($filme->getTitulo()) ?>, capa: <?= json_encode($srcCapa) ?>, ano: <?= (int)$filme->getAnoLancamento() ?>, genero: <?= json_encode($filme->getGenero()) ?>})' aria-label="Avaliar <?= htmlspecialchars($filme->getTitulo()) ?>">Avaliar</button>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
 
   <h2 style="margin:18px 0 8px;">Avaliações</h2>
         <div class="reviews">
           <?php if (!$avaliacoes): ?>
-            <button class="no-reviews" type="button" onclick='openRateModal({id: <?= (int)$filme->getId() ?>, titulo: <?= json_encode($filme->getTitulo()) ?>, capa: <?= json_encode($srcCapa) ?>, ano: <?= (int)$filme->getAnoLancamento() ?>, genero: <?= json_encode($filme->getGenero()) ?>})' aria-label="Seja o primeiro a avaliar este filme">Seja o primeiro a avaliar este filme</button>
+            <div style="padding:10px 0; color:hsl(var(--muted-foreground));">Nenhuma avaliação ainda</div>
           <?php else: ?>
             <?php foreach ($avaliacoes as $av): /** @var Avaliacao $av */ ?>
               <?php $u = $av->getUsuario(); /** @var User $u */ ?>

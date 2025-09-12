@@ -127,7 +127,6 @@ $currentPage = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
           <div class="user-menu" role="menu">
             <a href="/ProjetoMOD3-limpo/public/perfil.php" role="menuitem">Perfil</a>
             <a href="/ProjetoMOD3-limpo/public/minhas-avaliacoes.php" role="menuitem">Minhas avaliações</a>
-            <a href="#" role="menuitem">Coleções</a>
             <?php if ($userRoleNorm === 'admin'): ?>
               <a href="/ProjetoMOD3-limpo/public/adicionarFilme.php" role="menuitem">Adicionar</a>
             <?php endif; ?>

@@ -302,8 +302,6 @@ footer nav { display: flex; gap: 16px; }
 .review-item .no-score-text { color: hsl(var(--muted-foreground)); }
 
 /* bloco compacto para quando não há avaliações */
-.no-reviews { background: #2F3841; padding: 10px 14px; border-radius: 12px; display: inline-flex; align-items: center; gap: 12px; font-size: 15px; max-width: fit-content; width: fit-content; color: hsl(var(--foreground)); border: 0; cursor: pointer; }
-.no-reviews:hover { filter: brightness(1.03); transform: translateY(-1px); }
-.no-reviews:focus { outline: 3px solid hsl(var(--primary)); outline-offset: 3px; }
+/* .no-reviews styles removed: CTA replaced by static text in filme.php */
 
 
