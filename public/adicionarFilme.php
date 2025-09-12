@@ -92,8 +92,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// Em GET: busca todos os filmes para exibir
-$filmes = Filme::findAll();
+// Em GET: busca todos os filmes para exibir e aplica paginação em blocos de 7
+$filmesAll = Filme::findAll();
+$page = max(1, (int)($_GET['page'] ?? 1));
+$pageSize = 7;
+$total = count($filmesAll);
+$totalPages = $total > 0 ? (int)ceil($total / $pageSize) : 1;
+$start = ($page - 1) * $pageSize;
+$filmes = array_slice($filmesAll, $start, $pageSize);
 ?>
 
 <!DOCTYPE html>
@@ -203,5 +209,14 @@ $filmes = Filme::findAll();
         <?php endforeach; ?>
         </tbody>
     </table>
+    <div style="display:flex; gap:8px; align-items:center; margin:14px 0;">
+        <?php if ($page > 1): ?>
+            <a class="btn" href="?page=<?= $page - 1 ?>">Anteriores</a>
+        <?php endif; ?>
+        <div style="color:hsl(var(--muted-foreground));">Página <?= $page ?> de <?= $totalPages ?></div>
+        <?php if ($page * $pageSize < $total): ?>
+            <a class="btn btn-ghost" href="?page=<?= $page + 1 ?>">Próximos</a>
+        <?php endif; ?>
+    </div>
 </body>
 </html>
