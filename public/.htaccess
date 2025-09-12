@@ -1,0 +1,5 @@
+# Redireciona erros 404 para a página customizada
+ErrorDocument 404 /ProjetoMOD3-limpo/public/404.php
+
+# Evita que o Apache mostre a listagem de diretório
+Options -Indexes
