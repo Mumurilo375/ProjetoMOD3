@@ -14,16 +14,18 @@ $em = Database::getEntityManager();
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($id <= 0) {
+  // Renderiza página 404 estilizada mantendo a URL
   http_response_code(404);
-  echo '<!doctype html><meta charset="utf-8"><title>Filme não encontrado</title><p>Filme não encontrado.</p>';
+  include __DIR__ . '/404.php';
   exit;
 }
 
 /** @var Filme|null $filme */
 $filme = $em->find(Filme::class, $id);
 if (!$filme) {
+  // Renderiza página 404 estilizada mantendo a URL
   http_response_code(404);
-  echo '<!doctype html><meta charset="utf-8"><title>Filme não encontrado</title><p>Filme não encontrado.</p>';
+  include __DIR__ . '/404.php';
   exit;
 }
 

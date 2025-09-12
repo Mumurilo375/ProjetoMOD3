@@ -40,6 +40,10 @@ $currentPage = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 <header class="site-header">
   <div class="inner container">
     <div class="brand"><a href="/ProjetoMOD3-limpo/public/index.php" aria-label="Home"><img src="/ProjetoMOD3-limpo/public/img/LogoStarRate.png" alt="Logo StarRate"/></a></div>
+    <!-- botão hamburger para mobile -->
+    <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu" type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </button>
 
     <nav class="nav" aria-label="Menu principal">
       <style>
@@ -56,6 +60,14 @@ $currentPage = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
       <a href="/ProjetoMOD3-limpo/public/filmes.php" class="<?= $currentPage === 'filmes.php' ? 'active' : '' ?>">Filmes</a>
       <a href="/ProjetoMOD3-limpo/public/lancamentos.php" class="<?= $currentPage === 'lancamentos.php' ? 'active' : '' ?>">Lançamentos</a>
     </nav>
+    
+    <!-- mobile menu (visível somente em telas pequenas quando aberto) -->
+  <div id="mobile-menu" class="mobile-nav" aria-hidden="true">
+      <div class="mobile-links">
+        <a href="/ProjetoMOD3-limpo/public/filmes.php">Filmes</a>
+        <a href="/ProjetoMOD3-limpo/public/lancamentos.php">Lançamentos</a>
+      </div>
+    </div>
     <script>
       (function(){
         var nav = document.currentScript && document.currentScript.previousElementSibling;
@@ -149,4 +161,62 @@ $currentPage = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
       <?php endif; ?>
     </div>
   </div>
+  <style>
+    /* responsividade local do header */
+    .nav-toggle { display:none; background:transparent; border:0; color:inherit; padding:8px; border-radius:8px; }
+  .mobile-nav { display:none; position:fixed; inset:60px 16px auto 16px; background:hsl(var(--card)); border:1px solid hsl(var(--border)); border-radius:12px; padding:12px; box-shadow:var(--shadow-elev); z-index:120; transform-origin: top right; opacity:0; transform: translateY(-6px) scale(0.98); transition: opacity .18s ease, transform .18s ease; }
+  .mobile-nav.open, .mobile-nav[aria-hidden="false"] { display:block; opacity:1; transform: translateY(0) scale(1); }
+  .mobile-nav a { display:block; padding:8px 10px; margin-bottom:8px; border-radius:8px; color: hsl(var(--foreground)); text-decoration:none; }
+  .mobile-nav a:hover { background: hsl(var(--muted)); }
+    .mobile-links { margin-bottom:8px; }
+    @media (max-width: 880px) {
+      .site-header .nav:first-of-type { display:none; }
+      .nav-toggle { display:inline-flex; align-items:center; justify-content:center; }
+    }
+  </style>
+    <script>
+    (function(){
+      var btn = document.querySelector('.nav-toggle');
+      var menu = document.getElementById('mobile-menu');
+      if(!btn || !menu) return;
+
+      // Atualiza visibilidade via atributo e classe para facilitar CSS
+      function setOpen(isOpen){
+        menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        if(isOpen){
+          menu.classList.add('open');
+        } else {
+          menu.classList.remove('open');
+        }
+      }
+
+      function toggle(e){
+        if(e) e.stopPropagation();
+        var isOpen = menu.getAttribute('aria-hidden') === 'false';
+        setOpen(!isOpen);
+      }
+
+      // Fecha quando clica num link dentro do menu
+      menu.addEventListener('click', function(e){
+        var a = e.target.closest && e.target.closest('a');
+        if(a){ setOpen(false); }
+      });
+
+      // Fecha ao clicar fora
+      document.addEventListener('click', function(e){
+        if(!menu.contains(e.target) && !btn.contains(e.target)){
+          setOpen(false);
+        }
+      });
+
+      // Fecha com ESC
+      document.addEventListener('keydown', function(e){ if(e.key === 'Escape' || e.key === 'Esc'){ setOpen(false); }});
+
+      btn.addEventListener('click', toggle);
+
+      // Sincroniza estado inicial (em caso atributos alterados server-side)
+      setOpen(menu.getAttribute('aria-hidden') === 'false');
+    })();
+  </script>
 </header>
