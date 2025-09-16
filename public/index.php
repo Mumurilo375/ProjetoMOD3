@@ -6,14 +6,16 @@
 <?php 
 
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/ProjetoMOD3-limpo/bootstrap.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 use App\Model\Filme;
+use App\Core\Database;
 
 // fallback = imagem que vai aparecer como substituta caso não haja imagem do filme
 $fallback = 'https://i1.sndcdn.com/artworks-FnBdNXsN84HzazMs-ZPSsBw-t500x500.jpg';
 
 // busca todos os filmes (retorna array de objetos Filme)
-$filmeRepository = $entityManager->getRepository(Filme::class);
+$em = Database::getEntityManager();
+$filmeRepository = $em->getRepository(Filme::class);
 
 // Carrossel 1: filmes 1-4 (mais recentes)
 $filmesParaCarrossel1 = $filmeRepository->findBy([],['id' => 'DESC' ], 4);
@@ -54,7 +56,6 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>StarRate — Avaliação de Filmes e Séries</title>
   <meta name="description" content="Avalie filmes. Descubra tendências e compartilhe opiniões." />
-  <link rel="canonical" href="/static/index.html" />
   <meta name="robots" content="index,follow" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -234,6 +235,5 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
-  <script defer src="/static/js/app.js"></script>
 </body>
 </html>
