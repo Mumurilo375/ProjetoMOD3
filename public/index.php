@@ -114,7 +114,10 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
           ?>
 
           <figure class="poster-wrap">
-            <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+            <?php $id = (int)$filme->getId(); $url = 'filme.php?id=' . $id; ?>
+            <a class="poster-link" href="<?php echo htmlspecialchars($url); ?>" aria-label="Abrir <?php echo htmlspecialchars($filme->getTitulo()); ?>">
+              <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+            </a>
           </figure>
 
 
@@ -131,7 +134,10 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
           ?>
 
           <figure class="poster-wrap">
-            <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+            <?php $id = (int)$filme->getId(); $url = 'filme.php?id=' . $id; ?>
+            <a class="poster-link" href="<?php echo htmlspecialchars($url); ?>" aria-label="Abrir <?php echo htmlspecialchars($filme->getTitulo()); ?>">
+              <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+            </a>
           </figure>
 
 
@@ -148,7 +154,10 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
           ?>
 
           <figure class="poster-wrap">
-            <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+            <?php $id = (int)$filme->getId(); $url = 'filme.php?id=' . $id; ?>
+            <a class="poster-link" href="<?php echo htmlspecialchars($url); ?>" aria-label="Abrir <?php echo htmlspecialchars($filme->getTitulo()); ?>">
+              <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
+            </a>
           </figure>
 
 
@@ -169,7 +178,7 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
     <section class="section">
       <div class="container">
         <h2>Destaques da semana</h2>
-        <div class="grid cols-6">
+  <div class="grid cols-6 highlights">
           <?php
           // Renderizamos até 6 cards. Se vier menos do banco, completamos com fallback.
           // Segurança: sempre use htmlspecialchars em dados vindos do banco para evitar XSS.
@@ -180,9 +189,14 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
               $src = $src !== '' ? $src : $fallback;
               // Alt acessível: descreve minimamente o conteúdo
               $alt = 'Capa do filme ' . $filme->getTitulo();
+              $id  = (int)$filme->getId();
+              $url = 'filme.php?id=' . $id;
           ?>
             <figure class="card">
-              <img src="<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($alt); ?>" loading="lazy">
+              <a class="movie-link" href="<?php echo htmlspecialchars($url); ?>" aria-label="Abrir <?php echo htmlspecialchars($filme->getTitulo()); ?>">
+                <img src="<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($alt); ?>" loading="lazy">
+                <div class="movie-title"><?php echo htmlspecialchars($filme->getTitulo()); ?></div>
+              </a>
             </figure>
           <?php
             $renderizados++;
@@ -199,10 +213,10 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
     </section>
 
     <section class="section" style="background:hsl(var(--card) / 0.3); border-block:1px solid hsl(var(--border));">
-      <div class="container grid cols-3">
+  <div class="container grid cols-3">
   <div class="card"><h3 style="margin:0 0 6px;">Avaliações confiáveis</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Atribua notas de 0 a 100 e comentários que ajudam a comunidade a decidir o que assistir.</p></div>
-        <div class="card"><h3 style="margin:0 0 6px;">Listas e favoritos</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Organize sua experiência com listas personalizadas e favoritos.</p></div>
-  <div class="card"><h3 style="margin:0 0 6px;">Exploração inteligente</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Use a busca para encontrar filmes que importam pra você.</p></div>
+    <div class="card"><h3 style="margin:0 0 6px;">Perfil e conta</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Edite seus dados e atualize sua foto de perfil quando quiser.</p></div>
+  <div class="card"><h3 style="margin:0 0 6px;">Busca de filmes</h3><p style="margin:0; color:hsl(var(--muted-foreground));">Encontre títulos pelo nome usando a busca da página.</p></div>
       </div>
     </section>
   </main>

@@ -189,6 +189,8 @@ a:hover { filter: brightness(1.1); }
 .reel > img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; border: 1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
 .reel .poster-wrap { width:100%; margin:0; }
 .reel .poster-wrap img { width:100%; height:auto; aspect-ratio:2/3; object-fit:cover; display:block; border-radius:12px; border:1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
+.reel .poster-wrap a.poster-link { display:block; }
+.reel .poster-wrap a.poster-link:hover img { filter: brightness(1.06); box-shadow: 0 4px 12px hsl(0 0% 0% / .25); transition: filter .16s ease, box-shadow .16s ease, transform .16s ease; }
 .reel .poster-wrap .score { left:8px; top:8px; }
 .reel.anim1 { animation: scrollY 12s linear infinite; }
 .reel.anim2 { animation: scrollY 12s linear infinite reverse; }
@@ -227,6 +229,12 @@ a:hover { filter: brightness(1.1); }
 .grid.cols-6 { grid-template-columns: repeat(6, 1fr); }
 .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
 .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+/* Destaques da semana: imagens ocupando todo o card, sem fundo azul */
+.highlights .card { background: transparent; padding: 0; border: 0; box-shadow: none; border-radius: 0; }
+.highlights .card a.movie-link { display:block; color:inherit; text-decoration:none; }
+.highlights .card img { display: block; width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 14px; border: 1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
+.highlights .card .movie-title { margin-top: 8px; font-size: 14px; color: hsl(var(--muted-foreground)); text-align: center; }
+.highlights .card a.movie-link:hover img { filter: brightness(1.06); box-shadow: 0 4px 12px hsl(0 0% 0% / .25); transition: filter .16s ease, box-shadow .16s ease, transform .16s ease; }
 @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .reels { height: 420px; } .grid.cols-6 { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 640px) { .search { grid-template-columns: 1fr; } .grid.cols-6 { grid-template-columns: repeat(2, 1fr); } }
 
