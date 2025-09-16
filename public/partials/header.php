@@ -96,8 +96,8 @@ $currentPage = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
     <div class="nav">
       <?php if (!$loggedIn): ?>
-        <a class="btn btn-ghost" href="/ProjetoMOD3-limpo/public/auth.php?view=login">Login</a>
-        <a class="btn btn-primary" href="/ProjetoMOD3-limpo/public/auth.php?view=signup">Sign up</a>
+        <a class="btn btn-ghost" href="/ProjetoMOD3-limpo/public/auth.php?view=login">Entrar</a>
+        <a class="btn btn-primary" href="/ProjetoMOD3-limpo/public/auth.php?view=signup">Cadastrar</a>
       <?php else: ?>
         <div class="user">
           <button type="button" class="btn btn-ghost user-btn" aria-haspopup="menu" aria-expanded="false" aria-label="Abrir menu do usuário">

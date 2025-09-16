@@ -33,6 +33,16 @@ $primeirosFilmesParaLoop3 = array_slice($filmesParaCarrossel3, 0, min(4, count($
 $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
 
 // os arrays para os três carrosseis já foram montados acima (filmesComLoop1/2/3)
+
+// =============================
+// Destaques (somente ano 2025)
+// =============================
+// Aqui buscamos até 6 filmes lançados em 2025 diretamente do banco usando o Repository do Doctrine.
+// - Filtro: ['anoLancamento' => 2025]
+// - Ordenação: por 'id' DESC (mais recentes primeiro)
+// - Limite: 6 resultados no máximo
+// Observação: usaremos apenas a imagem de capa (getCapa) para preencher o grid de destaques.
+$destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'DESC'], 6);
 ?>
 
 
@@ -160,13 +170,30 @@ $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
       <div class="container">
         <h2>Destaques da semana</h2>
         <div class="grid cols-6">
-          <figure class="card"><img src="" alt="Destaque #1" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #1</figcaption></figure>
-          <figure class="card"><img src="/static/posters/poster2.jpg" alt="Destaque #2" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #2</figcaption></figure>
-          <figure class="card"><img src="/static/posters/poster3.jpg" alt="Destaque #3" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #3</figcaption></figure>
-          <figure class="card"><img src="/static/posters/poster4.jpg" alt="Destaque #4" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #4</figcaption></figure>
-          <figure class="card"><img src="/static/posters/poster5.jpg" alt="Destaque #5" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #5</figcaption></figure>
-          <figure class="card"><img src="/static/posters/poster6.jpg" alt="Destaque #6" loading="lazy"><figcaption style="margin-top:8px; color:hsl(var(--muted-foreground)); text-align:center;">Em alta #6</figcaption></figure>
-          
+          <?php
+          // Renderizamos até 6 cards. Se vier menos do banco, completamos com fallback.
+          // Segurança: sempre use htmlspecialchars em dados vindos do banco para evitar XSS.
+          $renderizados = 0;
+          foreach ($destaques2025 as $filme):
+              // Obtém a capa do filme; se não houver, usa a imagem fallback definida no topo do arquivo
+              $src = trim((string)$filme->getCapa());
+              $src = $src !== '' ? $src : $fallback;
+              // Alt acessível: descreve minimamente o conteúdo
+              $alt = 'Capa do filme ' . $filme->getTitulo();
+          ?>
+            <figure class="card">
+              <img src="<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($alt); ?>" loading="lazy">
+            </figure>
+          <?php
+            $renderizados++;
+          endforeach;
+
+          // Completa até 6 itens mantendo o layout uniforme
+          for (; $renderizados < 6; $renderizados++): ?>
+            <figure class="card">
+              <img src="<?php echo htmlspecialchars($fallback); ?>" alt="Capa de destaque" loading="lazy">
+            </figure>
+          <?php endfor; ?>
         </div>
       </div>
     </section>
