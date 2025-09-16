@@ -110,6 +110,7 @@ $filmes = array_slice($filmesAll, $start, $pageSize);
     <title>Adicionar Filme</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/adicionar.css">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 <body class="adicionar">
     <?php include __DIR__ . '/partials/header.php'; ?>

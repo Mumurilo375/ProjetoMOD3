@@ -175,3 +175,9 @@ body.adicionar input[name='film_trailer']:-webkit-autofill:focus {
 	transition: background-color 9999s ease-in-out 0s !important;
 	box-shadow: 0 0 0px 1000px rgba(255,255,255,0.02) inset !important;
 }
+
+/* Corrige transparência do menu do usuário nesta página
+   (aqui as variáveis foram definidas em HEX e o tema base usa hsl(var(--...))) */
+body.adicionar .user-menu { background: #111215; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
+body.adicionar .user-menu a:hover,
+body.adicionar .user-menu button:hover { background: rgba(255,255,255,0.06); }
