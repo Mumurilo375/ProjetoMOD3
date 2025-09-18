@@ -2,6 +2,9 @@
 declare(strict_types=1);
 if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
 http_response_code(404);
+
+//caso o apache leia a pagina digitada e ela nao seja encontrada, o servidor encaminha para esta pagina 404
+
 ?>
 <!doctype html>
 <html lang="pt-br">

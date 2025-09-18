@@ -51,9 +51,7 @@ function badgeTier(?int $score): string {
   <link rel="stylesheet" href="css/filmes.css" />
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
   <style>
-    /* Container principal */
   .profile { display:flex; flex-direction:column; gap:38px; max-width:1104px; margin:28px auto; }
-    /* Cartões com borda sutil e sombra para melhor definição */
   .card { border:1px solid rgba(255,255,255,0.06); background:hsl(var(--card)); border-radius:14px; padding:24px; box-shadow: 0 8px 22px rgba(11,18,32,0.07); }
     .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
   .avatar.big { width:96px; height:96px; display:inline-flex; align-items:center; justify-content:center; border-radius:999px; background:hsl(var(--muted)); color:hsl(var(--muted-foreground)); overflow:hidden; border:2px solid rgba(255,255,255,0.06); }
@@ -70,27 +68,19 @@ function badgeTier(?int $score): string {
     .badge.score-low { background:rgba(239,68,68,.12); color:#b91c1c; }
   .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:19px; }
     @media (max-width: 720px){ .grid2 { grid-template-columns: 1fr; } }
-
-    /* Ações alinhadas à direita e botões com ícones */
     .actions-right { display:flex; gap:12px; align-items:center; }
   .btn { transition: background-color .18s ease, box-shadow .12s ease; padding:12px 17px; border-radius:12px; font-weight:700; font-size:17px; display:inline-flex; align-items:center; gap:10px; }
   .btn-ghost { border:1px solid rgba(255,255,255,0.06); background:transparent; color:var(--foreground); }
   .btn-ghost:hover { background: rgba(255,255,255,0.02); box-shadow:0 8px 18px rgba(11,18,32,0.05); }
     .btn-primary { background: linear-gradient(180deg, #FBBF24, #F59E0B); color:#0b1220; border:0; box-shadow:0 8px 24px rgba(245,158,11,0.12); }
-  /* Azul proposto pelo usuário */
   .btn-secondary { background: #86A7D9; color:#07203A; border:0; box-shadow:0 12px 34px rgba(134,167,217,0.18); transition:box-shadow .18s ease; }
   .btn-secondary:hover, .btn-secondary:focus { filter:brightness(.96); box-shadow:0 18px 44px rgba(134,167,217,0.22); }
   .btn-ghost.btn-secondary { border-color: rgba(134,167,217,0.22); color:#86A7D9; background:transparent; }
     .btn svg { width:16px; height:16px; vertical-align:middle; }
-
-    /* Inputs e modal */
     .modal .modal-content { max-width:640px; }
     input[type="text"], input[type="file"] { padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:hsl(var(--background)); color:hsl(var(--foreground)); }
-
-    /* Texto secundário com melhor legibilidade */
     .profile section.card h2 { margin:0 0 4px; }
     .profile section.card div[style*="Gerencie sua conta"] { line-height:1.5; }
-  /* Overrides locais para evitar movimento/translate nesta página */
   .profile .btn, .profile .card, .profile .modal-content { transform: none !important; transition: none !important; }
   .profile .btn:hover, .profile .card:hover, .profile .modal-content:focus { transform: none !important; box-shadow: 0 10px 30px rgba(11,18,32,0.06) !important; }
   </style>

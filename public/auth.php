@@ -4,18 +4,16 @@ require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 
-// Estrutura MVC (Controler)
-// Alterna entre as views via ?view=login|signup (default login)
+// Estrutura MVC
+// view login|signup
 $view = $_GET['view'] ?? 'login';
 if (!in_array($view, ['login', 'signup'], true)) { $view = 'login'; }
 
 $errors = [];
-// Verifica se há uma mensagem de sucesso na URL (ex: ?ok=1).
 $success = $_GET['ok'] ?? null;
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Pega a ação do formulário ('login' ou 'signup').
     $action = $_POST['action'] ?? '';
 
     try {

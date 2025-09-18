@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 use App\Model\Filme;
 use App\Core\Database;
-$fallback = 'https://lh3.googleusercontent.com/rd-gg-dl/AJfQ9KTq2mXwFdVHSumEhgQzq3lTqniYsPFYppib_c21rsJtGx7jIM8briKOFu5t4Rq309qK9dWdCooXb2CnzTLBiMF633cP1dQH1S9k0BMihZAC6e1zxIHemItK2WEV-fgv6lFSrl-q-x_YAqFXW8D9sQ1YgxQuhX4ujzIcnYajveMi9GhJZd2J7u5m2z7xUR_CWGbZs5w-Z6eAeuZo6Ptg-hQYgDW3wrvRb4IPPp1e8jUjzHIybcn_hbKq4WBDFa8u5ghHWbVqd1eotsa3BnxFaoTxQXU5SOql_te-KJeb8kgHxZuVRs7wzwvc3lzq7EjvUHcMe4N61x1lMnwFlzGhjfX2mD0zuagSEarc1xF3BwrL7zani-1x_0pYBJmh94TWfIjEHBBbl_OH_EwmBIcEgqilsjSgUux3qp7pZiwelqQ8mWOYML_Q3CV4fjabiA6a_-S9PApQCXnnGuYQEf758hakAvJa_fi5QBL5vdnQvscuSa4ccXLnSaHGrin2jLlQbDESQLVZnCXKgtzLGH2vBRJrvVgKbANYLo82-MmpiJP164fc6eXfilWmG6wxRsoXtVoyCsGLJhIDi0mS8RQOW-_Qp517uL0DxqxL63FCHJjae85OoJpxJRkgjvaWJUdoZPasN-6eEt-qeKa-77Q4T_5W3S9v5cL-yzw_FKN1GM1wLMMoDyYOfr97_38BV4S2YNNtN9G5BkwjMi1YfXgwLF8Zi6tBkWLspTROhEona-J-693r-KgGHgGXje3BzvzT0IAOsReyrTDH27twOMyZyydtW0IMm5FsxrtKxEH67unsVeBEWCFRwZUW5gwODbs_EJDKHS90HDJDVbOcKzKEyCvnAmYGJNxvF8CzN8TxsuMP5UCaUQRcJ2DsjjvijindTDziE4WGarQvlr4m2FYqeWvu3E8kVljIqHE7HXuEIRXSKb9nbEwyeo-kz2da6EJhrYFfqK-RYulIjtXWbZEmFV6eVC9coSmpICZymPznd9_MQz6bLNA66ZLoFe3gdYojss3rtND-LJl9K8wWUady55ep1EGdkQECCfj2HgIqpsEaX-uPAScnJH2mUQqehhB1kfKCGQoLpKBQadj7Kg7fqdQnhfeFmACn7ipmwxn7gwfA1_G9kiAALnynZgYWIl6zLoOPYlgxrfPjRk9gzJRVReBRrAriM4JIkZfB5cRMfK6xM4GDbYVg7pTIm-jH87_CrCO4QR7U0CEhcbryO8EO19kd0Oxr3A=s1024';
+$fallback = 'img/fallback.png';
 
 
 
@@ -55,7 +55,7 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
       <section>
         <h1>Descubra, avalie e compartilhe sua paixão por cinema</h1>
         <p>Notas de 0 a 100, comentários e tendências em um só lugar. Comece agora!</p>
-        <!--pesquisa de filme-->
+        <!--pesquisar filme-->
         <form class="search js-search-form" aria-label="Buscar filmes" method="get" action="filmes.php">
           <input name="q" type="search" placeholder="Busque por títulos de filmes" aria-label="Pesquisar filmes" />
           <button class="btn btn-primary" type="submit">Buscar</button>
@@ -64,8 +64,7 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
 
 
 
-
-      <!--Carrosseis html-->
+      
       <aside aria-label="Carrosséis de pôsteres" class="reels">
 
         <div class="reel anim1">
@@ -75,7 +74,7 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
           <figure class="poster-wrap">
             <?php 
             $id = (int)$filme->getId(); 
-            //variavel url linkar o filme
+            //$url p/linkar o filme
             $url = 'filme.php?id=' . $id; ?>
 
             <a class="poster-link" href="<?php echo htmlspecialchars($url); ?>" aria-label="Abrir <?php echo htmlspecialchars($filme->getTitulo()); ?>">
@@ -88,7 +87,6 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
 
         <div class="reel anim2">
           <?php
-          //5-8
           foreach ($filmesComLoop2 as $filme): ?>
             
           <figure class="poster-wrap">

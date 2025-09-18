@@ -1,11 +1,9 @@
 <?php
 declare(strict_types=1);
-
 require_once __DIR__ . '/../vendor/autoload.php';
-
 use App\Core\Database;
 use App\Model\Filme;
-use App\Model\Avaliacao; // import mantido, porém usaremos FQN no loop por segurança
+use App\Model\Avaliacao;
 
 if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
 
@@ -14,11 +12,9 @@ $repo = $em->getRepository(Filme::class);
 
 $q = trim($_GET['q'] ?? '');
 
-// Paginação
 $page = max(1, (int)($_GET['page'] ?? 1));
 $pageSize = 7;
 
-// QueryBuilder: selecionar filmes e ordenar pela média das avaliações (desc)
 $qb = $em->createQueryBuilder();
 $qb->select('f')
    ->from(Filme::class, 'f')
@@ -46,8 +42,8 @@ $total = (int)$countQb->getQuery()->getSingleScalarResult();
 $qb->setFirstResult(($page - 1) * $pageSize)->setMaxResults($pageSize);
 $filmes = $qb->getQuery()->getResult();
 
-function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($score >= 40 ? 'score-mid' : 'score-low'); }
-?>
+function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($score >= 40 ? 'score-mid' : 'score-low'); } ?>
+
 <!doctype html>
 <html lang="pt-br">
 <head>
@@ -80,10 +76,12 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
             $score = $mid !== null ? (int)round($mid) : null;
             $tier = $score !== null ? scoreTier($score) : '';
           ?>
+          
           <li class="movie-item" data-href="/ProjetoMOD3-limpo/public/filme.php?id=<?= (int)$filme->getId() ?>" tabindex="0" aria-label="Ver detalhes de <?= htmlspecialchars($filme->getTitulo()) ?>">
             <a class="poster" href="/ProjetoMOD3-limpo/public/filme.php?id=<?= (int)$filme->getId() ?>">
               <img src="<?= htmlspecialchars($filme->getCapa()) ?>" alt="Capa de <?= htmlspecialchars($filme->getTitulo()) ?>" />
             </a>
+            <!--acima mostra a capa, a baixo mostra titulo,genero,sinopse e ano-->
             <div class="content">
               <h3>
                 <a class="movie-title-link" href="/ProjetoMOD3-limpo/public/filme.php?id=<?= (int)$filme->getId() ?>">
@@ -94,13 +92,14 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
               <p class="overview"><?= nl2br(htmlspecialchars($filme->getSinopse())) ?></p>
               <div class="meta-year"><?= (int)$filme->getAnoLancamento() ?></div>
             </div>
+
             <div class="score-col">
               <?php if ($score !== null): ?>
                 <div class="score-card <?= $tier ?>">
-                  <div class="score-badge <?= $tier ?>">
+                  <div class="score-badge <?= $tier ?>"> <!--define a cor-->
                     <span class="label">MÉDIA</span>
                     <span class="value"><?= $score ?></span>
-                  </div>
+                  </div> <!--abrir rate modal-->
                   <button class="btn rate-btn" type="button" onclick='openRateModal({id: <?= (int)$filme->getId() ?>, titulo: <?= json_encode($filme->getTitulo()) ?>, capa: <?= json_encode($filme->getCapa()) ?>, ano: <?= (int)$filme->getAnoLancamento() ?>, genero: <?= json_encode($filme->getGenero()) ?>})'>Avaliar</button>
                 </div>
               <?php else: ?>
@@ -114,7 +113,7 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
         <?php endforeach; ?>
       </ul>
 
-      <?php if (count($filmes) === 0): ?>
+      <?php if (count($filmes) === 0): ?> <!--filme n encontrado-->
         <div class="card" style="margin-top:18px; text-align:center;">
           <h3 style="margin:0 0 8px;">Nenhum filme encontrado</h3>
           <?php if ($q !== ''): ?>
@@ -141,7 +140,6 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
   </main>
   <?php include __DIR__ . '/partials/rate_modal.php'; ?>
   <script>
-    // Tornar todo o .movie-item clicável: clicar ou pressionar Enter navega para data-href.
     (function(){
       function isInteractive(el){
         if(!el) return false;
@@ -152,7 +150,6 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
       document.addEventListener('click', function(e){
         const item = e.target.closest('.movie-item');
         if(!item) return;
-        // se o clique foi em um link ou botão interno, não sobrescrever
         if(isInteractive(e.target)) return;
         const href = item.getAttribute('data-href');
         if(href) location.href = href;
@@ -167,5 +164,22 @@ function scoreTier(int $score): string { return $score >= 70 ? 'score-high' : ($
       });
     })();
   </script>
+
+  <footer>
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+      <p style="color:hsl(var(--muted-foreground)); margin:0;">© <span id="year"></span> StarRate — Todos os direitos reservados.</p>
+      <nav>
+        <a href="#">Termos</a>
+        <a href="#">Privacidade</a>
+        <a href="#">Contato</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    if (document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+  </script>
+
 </body>
 </html>
