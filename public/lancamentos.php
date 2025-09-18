@@ -1,18 +1,14 @@
-<?php
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
-
 use App\Core\Database;
 use App\Model\Filme;
 use App\Model\Avaliacao;
-
 if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+
 
 $em = Database::getEntityManager();
 $q = trim($_GET['q'] ?? '');
 
-// Paginação
 $page = max(1, (int)($_GET['page'] ?? 1));
 $pageSize = 7;
 
@@ -29,10 +25,9 @@ if ($q !== '') {
        ->setParameter('q', '%' . strtolower($q) . '%');
 }
 
-// ordernar por média das notas
+// ordem por média
 $qb->orderBy('AVG(a.nota)', 'DESC');
 
-// total
 $countQb = $em->createQueryBuilder();
 $countQb->select('COUNT(f.id)')
   ->from(Filme::class, 'f')

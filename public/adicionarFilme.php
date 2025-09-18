@@ -1,12 +1,11 @@
 <?php
 if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
-// Bloqueia acesso se não estiver logado ou não for admin
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: auth.php?view=login&err=auth');
     exit;
 }
-
-// Em ambientes simples vamos consultar o banco para garantir papel atualizado
+// acesso apenas para admin
 require_once __DIR__ . '/../vendor/autoload.php';
 use App\Core\Database;
 use App\Model\User;
@@ -21,22 +20,13 @@ try {
     header('Location: error.php?code=403');
     exit;
 }
-// Página de testes para criar filmes e listar (exemplo de POST/Redirect/GET)
-// PRG: evita reenvio de formulário quando o usuário recarrega a página.
-
 use App\Model\Filme;
 
 $caminhoDaCapa = '';
 $_trailer = null;
 
-
-
-// Se recebeu POST, cria a entidade e salva no banco
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // --- NOVA LÓGICA DE UPLOAD DA IMAGEM ---
-
-    // 1. Verifica se o campo 'film_capa' foi enviado e se não houve erro no upload.
     if (isset($_FILES['film_capa']) && $_FILES['film_capa']['error'] === UPLOAD_ERR_OK) {
 
         // 2. Define o diretório de destino. Crie esta pasta no seu projeto!

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 session_start();
 
-// Remove dados da sessão e destrói
+// Remove dados da sessão
 $_SESSION = [];
 if (ini_get('session.use_cookies')) {
     $params = session_get_cookie_params();

@@ -30,9 +30,9 @@ class Filme
     private string $genero;
 
     #[Column]
-    private string $capa; //ex: public/img/interestelar.jpg
+    private string $capa;
 
-    // Link opcional para trailer do YouTube (pode ser URL completa)
+    // Link opcional trailer
     #[Column(nullable: true)]
     private ?string $trailer = null;
 

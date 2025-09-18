@@ -4,8 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 
-// Estrutura MVC
-// view login|signup
+// view login|signup (mvc)
 $view = $_GET['view'] ?? 'login';
 if (!in_array($view, ['login', 'signup'], true)) { $view = 'login'; }
 
@@ -18,11 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $em = Database::getEntityManager();
-        // Obtém o repositório da entidade User para fazer buscas no banco.
         $userRepo = $em->getRepository(User::class);
 
         if ($action === 'signup') {
-            // Pega e limpa os dados enviados pelo formulário de cadastro.
+            // limpa dados enviados pelo form
             $nome  = trim($_POST['nome']  ?? '');
             $email = trim($_POST['email'] ?? '');
             $senha = (string)($_POST['senha'] ?? '');
@@ -37,23 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors[] = 'A senha deve ter pelo menos 6 caracteres.';
             }
 
-            // Se não houver erros de validação até agora, verifica se o e-mail já existe.
             if (!$errors) {
-                // Procura por um usuário com o mesmo e-mail no banco.
                 $existing = $userRepo->findOneBy(['email' => $email]);
-                // Se encontrar, adiciona um erro.
                 if ($existing) {
                     $errors[] = 'Já existe um usuário cadastrado com este e-mail.';
                 }
             }
 
-            // Se, após todas as verificações, não houver erros.
             if (!$errors) {
-                // Cria um novo objeto User (a senha é criptografada no construtor).
                 $user = new User($nome, $email, $senha);
                 $user->save();
 
-                // Inicia a sessão para o novo usuário (autologin).
                 $_SESSION['user_id'] = $user->getId();
                 $_SESSION['user_nome'] = $user->getNome();
                 $_SESSION['user_role'] = strtolower($user->getNivelAcesso());
@@ -62,15 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-            // Se houveram erros, garante que a view de signup seja exibida novamente.
             $view = 'signup';
         }
 
 
 
-        // Se a ação for 'login' (entrar na conta).
         if ($action === 'login') {
-            // Pega e limpa os dados enviados pelo formulário de login.
             $email = trim($_POST['email'] ?? '');
             $senha = (string)($_POST['senha'] ?? '');
 
@@ -80,13 +69,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors[] = 'Informe um e-mail válido.';
             } else {
-                // Busca o usuário pelo e-mail no banco de dados.
                 $user = $userRepo->findOneBy(['email' => $email]);
                 // Se o usuário não for encontrado OU a senha estiver incorreta...
                 if (!$user || !$user->verificaSenha($senha)) {
                     $errors[] = 'E-mail ou senha inválidos.';
                 } else {
-                    // Se o login for bem-sucedido, armazena os dados do usuário na sessão.
                     $_SESSION['user_id'] = $user->getId();
                     $_SESSION['user_nome'] = $user->getNome();
                     $_SESSION['user_role'] = strtolower($user->getNivelAcesso());
@@ -95,10 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // Se houver erros, garante que a view de login seja exibida novamente (mvc).
+            // Se houver erros, a view de login será exibida novamente (mvc).
             $view = 'login';
         }
-    // Captura qualquer erro geral que possa ocorrer durante o processo.
     } catch (Throwable $e) {
         $errors[] = 'Erro ao processar a solicitação.';
     }
@@ -127,13 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h1 class="title">Bem-vindo</h1>
       <p class="subtitle">Acesse sua conta ou crie uma nova para avaliar filmes.</p>
 
-      <!-- Abas para alternar entre login e cadastro -->
       <div class="segmented" role="tablist">
         <a class="seg<?= $view === 'login' ? ' active' : '' ?>" href="?view=login" role="tab" aria-selected="<?= $view === 'login' ? 'true' : 'false' ?>">Entrar</a>
         <a class="seg<?= $view === 'signup' ? ' active' : '' ?>" href="?view=signup" role="tab" aria-selected="<?= $view === 'signup' ? 'true' : 'false' ?>">Criar conta</a>
       </div>
 
-      <?php if ($errors): // printa o erro ?>
+      <?php if ($errors): // printa erro ?>
         <div class="card" style="background:hsl(var(--card)); margin:0 0 12px; border:1px solid hsl(0 72% 50% / .35);">
           <ul style="margin:8px 12px; padding-left: 18px; color:hsl(0 72% 70%);">
             <?php foreach ($errors as $err): ?>
@@ -193,7 +178,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
   <script>
-  // Script para mensagens de validação customizadas (substitui tooltips nativos)
   (function(){
     function setError(field, message){
       const container = field.closest('.field');
@@ -222,7 +206,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     document.querySelectorAll('.auth-card form').forEach(form => {
-      //  Verifica todos os campos quando o usuário clica em "Entrar" ou "Criar conta".
       form.addEventListener('submit', function(e){
         let hasError = false;
         const fields = form.querySelectorAll('input[required], input[minlength]');
@@ -235,7 +218,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return true;
       });
 
-      //  Valida o campo em tempo real, assim que o usuário termina de digitar.
       form.querySelectorAll('input').forEach(inp => {
         inp.addEventListener('input', () => { clearError(inp); });
         inp.addEventListener('blur', () => {
@@ -258,7 +240,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </footer>
   <script>
-    // Este script do rodapé precisa ser separado do script de validação para funcionar corretamente.
     if (document.getElementById('year')) {
       document.getElementById('year').textContent = new Date().getFullYear();
     }

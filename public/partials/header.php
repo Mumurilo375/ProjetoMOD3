@@ -161,8 +161,14 @@ $currentPage = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
       <?php endif; ?>
     </div>
   </div>
+
+
+
+
+
+
   <style>
-    /* responsividade local do header */
+    /* responsividade local */
     .nav-toggle { display:none; background:transparent; border:0; color:inherit; padding:8px; border-radius:8px; }
   .mobile-nav { display:none; position:fixed; inset:60px 16px auto 16px; background:hsl(var(--card)); border:1px solid hsl(var(--border)); border-radius:12px; padding:12px; box-shadow:var(--shadow-elev); z-index:120; transform-origin: top right; opacity:0; transform: translateY(-6px) scale(0.98); transition: opacity .18s ease, transform .18s ease; }
   .mobile-nav.open, .mobile-nav[aria-hidden="false"] { display:block; opacity:1; transform: translateY(0) scale(1); }
@@ -174,6 +180,12 @@ $currentPage = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
       .nav-toggle { display:inline-flex; align-items:center; justify-content:center; }
     }
   </style>
+
+
+
+
+
+
     <script>
     (function(){
       var btn = document.querySelector('.nav-toggle');

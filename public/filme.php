@@ -14,7 +14,6 @@ $em = Database::getEntityManager();
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($id <= 0) {
-  // Renderiza página 404 estilizada mantendo a URL
   http_response_code(404);
   include __DIR__ . '/404.php';
   exit;
@@ -23,18 +22,16 @@ if ($id <= 0) {
 /** @var Filme|null $filme */
 $filme = $em->find(Filme::class, $id);
 if (!$filme) {
-  // Renderiza página 404 estilizada mantendo a URL
   http_response_code(404);
   include __DIR__ . '/404.php';
   exit;
 }
 
-// Média e contagem
 $media = Avaliacao::getMediaPorFilmeId($filme->getId());
 $total = Avaliacao::getContagemPorFilmeId($filme->getId());
 $mediaInt = $media !== null ? (int)round($media) : null;
 
-// Avaliações (mais recentes primeiro)
+// Avaliações (desc)
 $qb = $em->createQueryBuilder();
 $qb->select('a', 'u')
    ->from(Avaliacao::class, 'a')
@@ -50,9 +47,8 @@ function badgeTier(?int $score): string {
 }
 
 function srcPublic(string $path): string {
-  // Normaliza caminhos que já venham absolutos
   if (str_starts_with($path, '/')) return $path;
-  // Remove prefixo 'public/' se vier do banco assim
+  // Remove 'public/'
   if (str_starts_with($path, 'public/')) {
     $path = substr($path, 7);
   }
@@ -71,6 +67,12 @@ function srcPublic(string $path): string {
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/filmes.css" />
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+
+
+
+
+
+
   <style>
     .movie-page { display:grid; grid-template-columns: 300px 1fr; gap: 20px; }
     .poster { border-radius: 12px; overflow:hidden; border:1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
@@ -108,6 +110,12 @@ function srcPublic(string $path): string {
 
   @media (max-width: 800px){ .movie-page { grid-template-columns: 1fr; } .rating-box { min-width:auto; } .movie-title { font-size:36px; } }
   </style>
+
+
+
+
+
+
 </head>
 <body>
   <?php include __DIR__ . '/partials/header.php'; ?>
@@ -210,7 +218,7 @@ function srcPublic(string $path): string {
     </div>
   </main>
   <?php
-    // Extrai ID do YouTube (aceita URLs comuns) ou usa URL inteira no embed
+    // Extrai ID do YouTube
     $yt = $filme->getTrailer();
     $embedSrc = null;
     if ($yt) {
@@ -222,7 +230,7 @@ function srcPublic(string $path): string {
       if ($vid) {
         $embedSrc = 'https://www.youtube.com/embed/' . $vid . '?autoplay=1&rel=0';
       } else {
-        // fallback direto
+        // fallback
         $embedSrc = $url;
       }
     }
@@ -260,7 +268,6 @@ function srcPublic(string $path): string {
       }
       function close(){
         modal.setAttribute('aria-hidden','true');
-        // descarrega o iframe para pausar áudio/vídeo
         var f = document.getElementById('yt-frame');
         if(f && f.getAttribute('src')){
           f.setAttribute('src', '');

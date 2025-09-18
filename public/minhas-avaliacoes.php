@@ -1,8 +1,5 @@
-<?php
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
-
 use App\Core\Database;
 use App\Model\Avaliacao;
 use App\Model\Filme;
@@ -23,11 +20,11 @@ if (!$user) {
     exit;
 }
 
-// Buscar avaliações do usuário, mais recentes primeiro (lazy-load do filme)
-$page = max(1, (int)($_GET['page'] ?? 1));
-$pageSize = 3; // 3 avaliações por página
 
-// total de avaliações do usuário (para paginação)
+$page = max(1, (int)($_GET['page'] ?? 1));
+$pageSize = 3;
+
+// total de avaliações
 $countQb = $em->createQueryBuilder();
 $countQb->select('COUNT(a.id)')
   ->from(Avaliacao::class, 'a')
@@ -35,7 +32,7 @@ $countQb->select('COUNT(a.id)')
   ->setParameter('user', $user->getId());
 $total = (int)$countQb->getQuery()->getSingleScalarResult();
 
-// buscar avaliações paginadas do usuário
+// buscar aval
 $qb = $em->createQueryBuilder();
 $qb->select('a')
   ->from(Avaliacao::class, 'a')
@@ -60,6 +57,12 @@ function fmtDate(DateTime $dt): string { return $dt->format('d/m/Y H:i'); }
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/filmes.css" />
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+
+
+
+
+
+
   <style>
     .my-reviews { display:grid; gap:12px; }
     .review-card { display:grid; grid-template-columns: 92px 1fr; gap:12px; padding:12px; border:1px solid hsl(var(--border)); border-radius:12px; background:hsl(var(--card)); }
@@ -73,13 +76,16 @@ function fmtDate(DateTime $dt): string { return $dt->format('d/m/Y H:i'); }
     .badge.score-low { background:rgba(239,68,68,.15); color:#b91c1c; }
     .review-meta { color:hsl(var(--muted-foreground)); font-size:12px; }
     .review-body { margin-top:6px; white-space:pre-wrap; }
-  /* back-circle (same look as filme.php) */
-  /* reduced by ~10% to match requested size */
   .back-circle { width:36px; height:36px; border-radius:50%; background:#ffd400; border:2px solid #000; display:inline-grid; place-items:center; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.12); }
   .back-circle svg { width:16px; height:16px; fill:#000; transform: rotate(0deg); }
-  /* layout for title + back button */
   .title-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
   .title-row .page-title { margin:0; line-height:1.1; }
+
+
+
+
+
+
   </style>
 </head>
 <body>
@@ -135,7 +141,6 @@ function fmtDate(DateTime $dt): string { return $dt->format('d/m/Y H:i'); }
       if(!back) return;
       back.addEventListener('click', function(e){
         e.preventDefault();
-        // prefer history.back when possible, fallback to index
         if(window.history && window.history.length > 1){
           window.history.back();
         } else {
@@ -144,7 +149,7 @@ function fmtDate(DateTime $dt): string { return $dt->format('d/m/Y H:i'); }
       });
     })();
 
-    // Make review cards clickable (click or Enter key)
+    // botao enter
     (function(){
       var cards = document.querySelectorAll('.review-card[data-href]');
       if(!cards.length) return;

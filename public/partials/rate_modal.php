@@ -1,8 +1,8 @@
 <?php
-// Modal reutilizável para avaliar filmes (nota 0..100 + comentário)
 if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
-$__USER_LOGGED = isset($_SESSION['user_id']);
-?>
+$__USER_LOGGED = isset($_SESSION['user_id']); ?>
+
+<!--html do avaliar-->
 <div id="rate-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
   <div class="modal-backdrop" data-close></div>
   <div class="modal-content" role="document">
@@ -42,14 +42,13 @@ $__USER_LOGGED = isset($_SESSION['user_id']);
 </div>
 
 <script>
-// Script do modal de avaliação (abre/fecha e popula com dados do filme)
+// (abre modal e usa dados do filme)
 (function(){
   const modal = document.getElementById('rate-modal');
   if(!modal) return;
   const closeEls = modal.querySelectorAll('[data-close]');
   closeEls.forEach(el=>el.addEventListener('click', ()=>modal.setAttribute('aria-hidden','true')));
   
-  // Modal de login requerido
   const loginReq = document.createElement('div');
   loginReq.id = 'login-required-modal';
   loginReq.className = 'modal';
@@ -86,14 +85,12 @@ $__USER_LOGGED = isset($_SESSION['user_id']);
     capa.alt = 'Poster de ' + (data.titulo || '');
     document.getElementById('rate-filme-ano').textContent = data.ano || '';
     document.getElementById('rate-filme-genero').textContent = data.genero || '';
-    // limpa campos anteriores
     const nota = document.getElementById('rate-nota');
     const comentario = document.getElementById('rate-comentario');
     nota.value = '';
     comentario.value = '';
   }
 
-  // expõe globalmente para os botões "Avaliar" chamarem
   window.openRateModal = openRateModal;
 })();
 </script>
