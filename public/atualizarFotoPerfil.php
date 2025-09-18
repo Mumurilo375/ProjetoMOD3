@@ -1,8 +1,5 @@
-<?php
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
-
 use App\Core\Database;
 use App\Model\User;
 
@@ -31,7 +28,6 @@ if ($file['size'] > $maxSize) {
     exit;
 }
 
-// Detecta mime real
 $finfo = new finfo(FILEINFO_MIME_TYPE);
 $mime = $finfo->file($file['tmp_name']);
 if (!isset($allowed[$mime])) {
@@ -43,7 +39,6 @@ $ext = $allowed[$mime];
 $baseDir = __DIR__ . '/img/fotoPerfil';
 if (!is_dir($baseDir)) { @mkdir($baseDir, 0777, true); }
 
-// Função utilitária: slug seguro para nome do usuário em arquivo
 $slugify = function (string $str): string {
     $s = $str;
     if (function_exists('iconv')) {
@@ -54,7 +49,6 @@ $slugify = function (string $str): string {
     $s = preg_replace('/[^a-z0-9]+/i', '-', $s) ?? '';
     $s = trim($s, '-');
     if ($s === '') { $s = 'usuario'; }
-    // Limita tamanho para evitar caminhos muito longos
     if (strlen($s) > 40) { $s = substr($s, 0, 40); }
     return $s;
 };
@@ -68,14 +62,14 @@ try {
         exit;
     }
 
-    // Monta nome determinístico: perfil_(nome)_id-(id).ext (sem caracteres inválidos)
+    // Monta nome
     $nameSlug = $slugify($user->getNome() ?? 'usuario');
     // Evita caracteres inválidos no Windows, como ':'
     $filename = 'perfil_' . $nameSlug . '_id-' . $user->getId() . '.' . $ext;
     $dest = $baseDir . '/' . $filename;
     $publicPath = '/ProjetoMOD3-limpo/public/img/fotoPerfil/' . $filename;
 
-    // Se já existir uma foto antiga e for um arquivo diferente do destino, remove
+    // remove foto antiga
     $old = $user->getFotoPerfil();
     if ($old && str_starts_with($old, '/ProjetoMOD3-limpo/public/img/fotoPerfil/')) {
         $oldFs = __DIR__ . str_replace('/ProjetoMOD3-limpo/public', '', $old);

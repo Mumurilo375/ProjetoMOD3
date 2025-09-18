@@ -1,8 +1,5 @@
-<?php
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
-
 use App\Core\Database;
 use App\Model\Avaliacao;
 use App\Model\User;
@@ -22,7 +19,6 @@ if (!$user) {
     exit;
 }
 
-// Estatísticas do usuário: total de avaliações e média pessoal
 $qb = $em->createQueryBuilder();
 $qb->select('COUNT(a.id) as total, AVG(a.nota) as media')
    ->from(Avaliacao::class, 'a')
@@ -50,6 +46,12 @@ function badgeTier(?int $score): string {
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/filmes.css" />
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+
+
+
+
+
+
   <style>
   .profile { display:flex; flex-direction:column; gap:38px; max-width:1104px; margin:28px auto; }
   .card { border:1px solid rgba(255,255,255,0.06); background:hsl(var(--card)); border-radius:14px; padding:24px; box-shadow: 0 8px 22px rgba(11,18,32,0.07); }
@@ -84,6 +86,12 @@ function badgeTier(?int $score): string {
   .profile .btn, .profile .card, .profile .modal-content { transform: none !important; transition: none !important; }
   .profile .btn:hover, .profile .card:hover, .profile .modal-content:focus { transform: none !important; box-shadow: 0 10px 30px rgba(11,18,32,0.06) !important; }
   </style>
+
+
+
+
+
+
 </head>
 <body>
   <?php include __DIR__ . '/partials/header.php'; ?>

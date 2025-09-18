@@ -29,31 +29,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_FILES['film_capa']) && $_FILES['film_capa']['error'] === UPLOAD_ERR_OK) {
 
-        // 2. Define o diretório de destino. Crie esta pasta no seu projeto!
         $diretorioUpload = __DIR__ . '/../public/img/capas/';
 
-        // 3. Pega o nome temporário do arquivo no servidor.
         $arquivoTemporario = $_FILES['film_capa']['tmp_name'];
 
-        // 4. Cria um nome de arquivo único e seguro para evitar conflitos.
+        //nome de arquivo único
         $nomeOriginal = basename($_FILES['film_capa']['name']);
         $extensao = pathinfo($nomeOriginal, PATHINFO_EXTENSION);
         $nomeUnico = uniqid('capa_', true) . '.' . $extensao;
 
-        // 5. Monta o caminho completo onde o arquivo será salvo.
         $caminhoFinal = $diretorioUpload . $nomeUnico;
 
-        // 6. Move o arquivo da pasta temporária para o destino final.
+        // Move o arquivo
         if (move_uploaded_file($arquivoTemporario, $caminhoFinal)) {
-            // Se o upload deu certo, guarda o caminho relativo para salvar no banco.
             $caminhoDaCapa = 'img/capas/' . $nomeUnico;
         } else {
-            // Se falhar, você pode adicionar uma mensagem de erro aqui.
-            $caminhoDaCapa = ''; // Garante que fique vazio se o upload falhar.
+            $caminhoDaCapa = '';
         }
     }
 
-    // normaliza e sanitiza valores do POST
     $titulo = trim($_POST['film_titulo'] ?? '');
     $sinopse = trim($_POST['film_sinopse'] ?? '');
     $ano = intval($_POST['film_anoLancamento'] ?? 0);
@@ -62,27 +56,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_trailer = isset($_POST['film_trailer']) ? trim((string)$_POST['film_trailer']) : null;
     if ($_trailer === '') { $_trailer = null; }
 
-    // construtor de Filme aceita (titulo, sinopse, ano, capa)
     $filme = new Filme(
         $titulo,
         $sinopse,
         $ano,
         diretor: $diretor,
         genero: $genero,
-        capa: $caminhoDaCapa, //aqui usamos o nome do arquivo enviado via upload
+        capa: $caminhoDaCapa,
         trailer: $_trailer
     );
 
     
     $filme->save();
 
-    // redireciona para evitar reenvio do POST (PRG)
+    // redireciona para desbugar reenvio
     $self = strtok($_SERVER['REQUEST_URI'], '?');
     header('Location: ' . $self . '?ok=1');
     exit;
 }
 
-// Em GET: busca todos os filmes para exibir e aplica paginação em blocos de 7
+// exb filmes em 7-7
 $filmesAll = Filme::findAll();
 $page = max(1, (int)($_GET['page'] ?? 1));
 $pageSize = 7;
@@ -108,14 +101,13 @@ $filmes = array_slice($filmesAll, $start, $pageSize);
         <div class="card-add">
             <h1>Adicionar filme</h1>
 
-    <?php // Exibe mensagem simples após salvar (depois do redirect do PRG)
+    <?php 
     if (isset($_GET['ok'])): ?>
         <p style="color: #12c25f; font-weight: 600;">Filme adicionado com sucesso.</p>
     <?php endif; ?>
 
 
 
-    <!-- action explícita para enviar para esta mesma página -->
     <form method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" enctype="multipart/form-data">
         <div class="form-grid">
             <div class="form-row">
