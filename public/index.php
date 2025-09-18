@@ -1,51 +1,64 @@
 <!doctype html>
-
-
-
-
 <?php 
-
-
 require_once __DIR__ . '/../vendor/autoload.php';
 use App\Model\Filme;
 use App\Core\Database;
 
-// fallback = imagem que vai aparecer como substituta caso não haja imagem do filme
-$fallback = 'https://i1.sndcdn.com/artworks-FnBdNXsN84HzazMs-ZPSsBw-t500x500.jpg';
+
+
+
+// fallback = imagem que vai aparecer como substituta caso o filme não seja encontrado
+$fallback = 'https://lh3.googleusercontent.com/rd-gg-dl/AJfQ9KTq2mXwFdVHSumEhgQzq3lTqniYsPFYppib_c21rsJtGx7jIM8briKOFu5t4Rq309qK9dWdCooXb2CnzTLBiMF633cP1dQH1S9k0BMihZAC6e1zxIHemItK2WEV-fgv6lFSrl-q-x_YAqFXW8D9sQ1YgxQuhX4ujzIcnYajveMi9GhJZd2J7u5m2z7xUR_CWGbZs5w-Z6eAeuZo6Ptg-hQYgDW3wrvRb4IPPp1e8jUjzHIybcn_hbKq4WBDFa8u5ghHWbVqd1eotsa3BnxFaoTxQXU5SOql_te-KJeb8kgHxZuVRs7wzwvc3lzq7EjvUHcMe4N61x1lMnwFlzGhjfX2mD0zuagSEarc1xF3BwrL7zani-1x_0pYBJmh94TWfIjEHBBbl_OH_EwmBIcEgqilsjSgUux3qp7pZiwelqQ8mWOYML_Q3CV4fjabiA6a_-S9PApQCXnnGuYQEf758hakAvJa_fi5QBL5vdnQvscuSa4ccXLnSaHGrin2jLlQbDESQLVZnCXKgtzLGH2vBRJrvVgKbANYLo82-MmpiJP164fc6eXfilWmG6wxRsoXtVoyCsGLJhIDi0mS8RQOW-_Qp517uL0DxqxL63FCHJjae85OoJpxJRkgjvaWJUdoZPasN-6eEt-qeKa-77Q4T_5W3S9v5cL-yzw_FKN1GM1wLMMoDyYOfr97_38BV4S2YNNtN9G5BkwjMi1YfXgwLF8Zi6tBkWLspTROhEona-J-693r-KgGHgGXje3BzvzT0IAOsReyrTDH27twOMyZyydtW0IMm5FsxrtKxEH67unsVeBEWCFRwZUW5gwODbs_EJDKHS90HDJDVbOcKzKEyCvnAmYGJNxvF8CzN8TxsuMP5UCaUQRcJ2DsjjvijindTDziE4WGarQvlr4m2FYqeWvu3E8kVljIqHE7HXuEIRXSKb9nbEwyeo-kz2da6EJhrYFfqK-RYulIjtXWbZEmFV6eVC9coSmpICZymPznd9_MQz6bLNA66ZLoFe3gdYojss3rtND-LJl9K8wWUady55ep1EGdkQECCfj2HgIqpsEaX-uPAScnJH2mUQqehhB1kfKCGQoLpKBQadj7Kg7fqdQnhfeFmACn7ipmwxn7gwfA1_G9kiAALnynZgYWIl6zLoOPYlgxrfPjRk9gzJRVReBRrAriM4JIkZfB5cRMfK6xM4GDbYVg7pTIm-jH87_CrCO4QR7U0CEhcbryO8EO19kd0Oxr3A=s1024';
+
+
+
 
 // busca todos os filmes (retorna array de objetos Filme)
 $em = Database::getEntityManager();
 $filmeRepository = $em->getRepository(Filme::class);
 
-// Carrossel 1: filmes 1-4 (mais recentes)
+
+
+
+// Carrossel 1: filmes 1-4
+
+// filtrando os filmes mais recentes pelo ID decrescente, e colocando um limit de 4 itens e adicionando estes filmes no array '$filmesParaCarrossel1'
 $filmesParaCarrossel1 = $filmeRepository->findBy([],['id' => 'DESC' ], 4);
+
+// este novo array '$primeirosFilmesParaLoop1' serve apenas para copiar os filmes do array de cima, para facilitar em fazer o efeito de loop no carrossel.
+//array_slice é para copiar o array, começando do indice 0 e terminando em 4 itens (ou o valor máximo que tiver, se for menos de 4)
 $primeirosFilmesParaLoop1 = array_slice($filmesParaCarrossel1, 0, min(4, count($filmesParaCarrossel1)));
+
+// o array_merge ele une os dois arrays em sequencia, para fazer o efeito de loop infinito no carrossel
 $filmesComLoop1 = array_merge($filmesParaCarrossel1, $primeirosFilmesParaLoop1);
 
-// Carrossel 2: filmes 5-8
+
+
+
+// Carrossel 2:  (mesmo esquema do carrossel 1, mas pegando os filmes do 5 ao 8)
+
 $filmesParaCarrossel2 = $filmeRepository->findBy([],['id' => 'DESC' ], 8);
 $filmesParaCarrossel2 = array_slice($filmesParaCarrossel2, 4, 4);
 $primeirosFilmesParaLoop2 = array_slice($filmesParaCarrossel2, 0, min(4, count($filmesParaCarrossel2)));
 $filmesComLoop2 = array_merge($filmesParaCarrossel2, $primeirosFilmesParaLoop2);
 
-// Carrossel 3: filmes 9-12
+
+
+
+// Carrossel 3:  (mesmo esquema do carrossel 1 e 2, mas pegando os filmes do 9 ao 12)
+
 $filmesParaCarrossel3 = $filmeRepository->findBy([],['id' => 'DESC' ], 12);
 $filmesParaCarrossel3 = array_slice($filmesParaCarrossel3, 8, 4);
 $primeirosFilmesParaLoop3 = array_slice($filmesParaCarrossel3, 0, min(4, count($filmesParaCarrossel3)));
 $filmesComLoop3 = array_merge($filmesParaCarrossel3, $primeirosFilmesParaLoop3);
 
-// os arrays para os três carrosseis já foram montados acima (filmesComLoop1/2/3)
 
-// =============================
+
+
 // Destaques (somente ano 2025)
-// =============================
-// Aqui buscamos até 6 filmes lançados em 2025 diretamente do banco usando o Repository do Doctrine.
-// - Filtro: ['anoLancamento' => 2025]
-// - Ordenação: por 'id' DESC (mais recentes primeiro)
-// - Limite: 6 resultados no máximo
-// Observação: usaremos apenas a imagem de capa (getCapa) para preencher o grid de destaques.
-$destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'DESC'], 6);
-?>
+
+// Aqui guardamos no array '$destaques2025' apenas os 6 ultimos filmes (adicionados no site) filtrados por ano de lançamento == 2025
+$destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'DESC'], 6); ?>
 
 
 
@@ -63,29 +76,13 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
   <link rel="stylesheet" href="css/style.css" />
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
-
-
-
 <body data-page="landing">
 
 
 
-  
-
-
-
-
-<?php include __DIR__ . '/partials/header.php'; ?>
-
-
-
-
-
-
-
-
-
-
+<?php
+// puxando o header pronto
+include __DIR__ . '/partials/header.php'; ?>
 
 
 
@@ -93,9 +90,13 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
   <main class="hero">
     <div class="container hero-grid">
       <section>
-        <h1>Descubra, avalie e compartilhe sua paixão por cinema e séries</h1>
-  <p>Notas de 0 a 100, comentários e tendências em um só lugar. Comece agora.</p>
+        <h1>Descubra, avalie e compartilhe sua paixão por cinema</h1>
+  <p>Notas de 0 a 100, comentários e tendências em um só lugar. Comece agora!</p>
+        <!--      formulário de pesquisa de filme        -->
         <form class="search js-search-form" aria-label="Buscar filmes" method="get" action="filmes.php">
+          <!--      joga o resultado para 'filmes.php'        -->
+                
+          <!--      Campo onde o user digita o filme      -->
           <input name="q" type="search" placeholder="Busque por títulos de filmes" aria-label="Pesquisar filmes" />
           <button class="btn btn-primary" type="submit">Buscar</button>
         </form>
@@ -104,19 +105,25 @@ $destaques2025 = $filmeRepository->findBy(['anoLancamento' => 2025], ['id' => 'D
 
 
 
-
-
+      <!--   Carrosséis de pôsteres  -->
       <aside aria-label="Carrosséis de pôsteres" class="reels">
         <div class="reel anim1">
-          <?php
 
-          //loop atraves dos objetos Filme que buscamos no banco pelo 'find by'
-          foreach ($filmesComLoop1 as $filme):
-          ?>
+        <!--  Carrossel 1  -->
+          <?php
+          //loop atraves 4 primeiros filmes que buscamos no banco pelo 'find by'
+          foreach ($filmesComLoop1 as $filme): ?>
 
           <figure class="poster-wrap">
-            <?php $id = (int)$filme->getId(); $url = 'filme.php?id=' . $id; ?>
+
+            <?php 
+            $id = (int)$filme->getId(); 
+            //cria a variavel url para cada filme baseado no ID (para caso clique no poster e redirecione para a pagina do filme especifico)
+            $url = 'filme.php?id=' . $id; ?>
+
             <a class="poster-link" href="<?php echo htmlspecialchars($url); ?>" aria-label="Abrir <?php echo htmlspecialchars($filme->getTitulo()); ?>">
+              <!--  aqui puxamos a string da capa do filme e colocamos no src da tag img de html pelo GetCapa
+              e para o alt definimos o nome do filme com um getTitulo    -->
               <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
             </a>
           </figure>
