@@ -68,7 +68,7 @@ class Filme
         $this->trailer = $url ?: null;
     }
 
-    // Persiste a entidade no banco usando o EntityManager do Doctrine
+    
     public function save(): void
     {
         $em = Database::getEntityManager();
@@ -76,7 +76,7 @@ class Filme
         $em->flush();
     }
 
-    //busca todos os filmes no banco retornando um array de objetos Filme
+
     public static function findAll(): array
     {
         $em = Database::getEntityManager();
