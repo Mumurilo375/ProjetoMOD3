@@ -249,5 +249,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   })();
   </script>
 
+  <footer>
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+      <p style="color:hsl(var(--muted-foreground)); margin:0;">© <span id="year"></span> StarRate — Todos os direitos reservados.</p>
+      <nav>
+        <a href="#">Termos</a>
+        <a href="#">Privacidade</a>
+        <a href="#">Contato</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    // Este script do rodapé precisa ser separado do script de validação para funcionar corretamente.
+    if (document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+  </script>
+
 </body>
 </html>
