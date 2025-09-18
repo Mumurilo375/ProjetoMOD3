@@ -107,15 +107,14 @@ include __DIR__ . '/partials/header.php'; ?>
 
       <!--   Carrosséis de pôsteres  -->
       <aside aria-label="Carrosséis de pôsteres" class="reels">
-        <div class="reel anim1">
 
-        <!--  Carrossel 1  -->
+        <div class="reel anim1">
+          <!--  Carrossel 1  -->
           <?php
           //loop atraves 4 primeiros filmes que buscamos no banco pelo 'find by'
           foreach ($filmesComLoop1 as $filme): ?>
 
           <figure class="poster-wrap">
-
             <?php 
             $id = (int)$filme->getId(); 
             //cria a variavel url para cada filme baseado no ID (para caso clique no poster e redirecione para a pagina do filme especifico)
@@ -127,58 +126,53 @@ include __DIR__ . '/partials/header.php'; ?>
               <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
             </a>
           </figure>
-
-
-          <?php 
-          endforeach;
-          ?>
-
+          <?php //finalizamos o foreach
+          endforeach; ?>
         </div>
-        <div class="reel anim2">
-          <?php
 
-          //loop atraves dos objetos Filme que buscamos no banco pelo 'find by'
-          foreach ($filmesComLoop2 as $filme):
-          ?>
+
+
+
+        <div class="reel anim2">
+          <!--  Carrossel 2  -->
+          <?php
+          //loop atraves dos filmes 5 ao 8
+          foreach ($filmesComLoop2 as $filme): ?>
 
           <figure class="poster-wrap">
-            <?php $id = (int)$filme->getId(); $url = 'filme.php?id=' . $id; ?>
+            <?php
+            $id = (int)$filme->getId();
+            $url = 'filme.php?id=' . $id; ?>
+
             <a class="poster-link" href="<?php echo htmlspecialchars($url); ?>" aria-label="Abrir <?php echo htmlspecialchars($filme->getTitulo()); ?>">
               <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
             </a>
           </figure>
-
-
           <?php 
-          endforeach;
-          ?>
-
+          endforeach; ?>
         </div>
+
+
+
+
         <div class="reel anim3">
           <?php
-
-          //loop atraves dos objetos Filme que buscamos no banco pelo 'find by'
-          foreach ($filmesComLoop3 as $filme):
-          ?>
+          foreach ($filmesComLoop3 as $filme): ?>
 
           <figure class="poster-wrap">
-            <?php $id = (int)$filme->getId(); $url = 'filme.php?id=' . $id; ?>
+            <?php
+            $id = (int)$filme->getId();
+            $url = 'filme.php?id=' . $id; ?>
+
             <a class="poster-link" href="<?php echo htmlspecialchars($url); ?>" aria-label="Abrir <?php echo htmlspecialchars($filme->getTitulo()); ?>">
               <img src="<?php echo htmlspecialchars($filme->getCapa()); ?>" alt="<?php echo htmlspecialchars($filme->getTitulo()); ?>" >
             </a>
           </figure>
-
-
           <?php
-          endforeach;
-          ?>
-
+          endforeach; ?>
         </div>
       </aside>
-
     </div>
-
-
 
 
 
@@ -186,21 +180,23 @@ include __DIR__ . '/partials/header.php'; ?>
     <section class="section">
       <div class="container">
         <h2>Destaques da semana</h2>
-  <div class="grid cols-6 highlights">
+
+      <div class="grid cols-6 highlights">
           <?php
-          // Renderizamos até 6 cards. Se vier menos do banco, completamos com fallback.
-          // Segurança: sempre use htmlspecialchars em dados vindos do banco para evitar XSS.
           $renderizados = 0;
+          // $destaques2025 é o array com os 6 últimos filmes do ano 2025 definido lá em cima
           foreach ($destaques2025 as $filme):
-              // Obtém a capa do filme; se não houver, usa a imagem fallback definida no topo do arquivo
+              // Obtém a capa do filme e guarda na variavel $src
               $src = trim((string)$filme->getCapa());
+              // Se $src estiver vazio, usa a imagem fallback definida no topo do arquivo
               $src = $src !== '' ? $src : $fallback;
-              // Alt acessível: descreve minimamente o conteúdo
               $alt = 'Capa do filme ' . $filme->getTitulo();
               $id  = (int)$filme->getId();
-              $url = 'filme.php?id=' . $id;
-          ?>
+              // cria a variavel url para deixar o filme linkavel e jogar para a pagina do filme.php baseado no seu id
+              $url = 'filme.php?id=' . $id; ?>
+
             <figure class="card">
+              <!-- deixa o poster linkavel -->
               <a class="movie-link" href="<?php echo htmlspecialchars($url); ?>" aria-label="Abrir <?php echo htmlspecialchars($filme->getTitulo()); ?>">
                 <img src="<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($alt); ?>" loading="lazy">
                 <div class="movie-title"><?php echo htmlspecialchars($filme->getTitulo()); ?></div>
@@ -210,7 +206,7 @@ include __DIR__ . '/partials/header.php'; ?>
             $renderizados++;
           endforeach;
 
-          // Completa até 6 itens mantendo o layout uniforme
+          // Continuar completando até 6 cards pelo for
           for (; $renderizados < 6; $renderizados++): ?>
             <figure class="card">
               <img src="<?php echo htmlspecialchars($fallback); ?>" alt="Capa de destaque" loading="lazy">
@@ -219,6 +215,9 @@ include __DIR__ . '/partials/header.php'; ?>
         </div>
       </div>
     </section>
+
+
+
 
     <section class="section" style="background:hsl(var(--card) / 0.3); border-block:1px solid hsl(var(--border));">
   <div class="container grid cols-3">
@@ -229,9 +228,12 @@ include __DIR__ . '/partials/header.php'; ?>
     </section>
   </main>
 
+
+  
+
   <footer>
     <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-      <p style="color:hsl(var(--muted-foreground)); margin:0;">© <span id="year"></span> AvaliaFlix — Todos os direitos reservados.</p>
+      <p style="color:hsl(var(--muted-foreground)); margin:0;">© <span id="year"></span> StarRate — Todos os direitos reservados.</p>
       <nav>
         <a href="#">Termos</a>
         <a href="#">Privacidade</a>
