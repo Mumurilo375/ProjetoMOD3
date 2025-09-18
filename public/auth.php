@@ -1,28 +1,30 @@
-<?php
-declare(strict_types=1);
-
-use App\Core\Database;
-use App\Model\User;
-
+<?php declare(strict_types=1); use App\Core\Database; use App\Model\User;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
+
+// Estrutura MVC (Controler)
 // Alterna entre as views via ?view=login|signup (default login)
 $view = $_GET['view'] ?? 'login';
 if (!in_array($view, ['login', 'signup'], true)) { $view = 'login'; }
 
 $errors = [];
+// Verifica se há uma mensagem de sucesso na URL (ex: ?ok=1).
 $success = $_GET['ok'] ?? null;
 
-// Processamento do formulário
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Pega a ação do formulário ('login' ou 'signup').
     $action = $_POST['action'] ?? '';
+
     try {
         $em = Database::getEntityManager();
+        // Obtém o repositório da entidade User para fazer buscas no banco.
         $userRepo = $em->getRepository(User::class);
 
         if ($action === 'signup') {
+            // Pega e limpa os dados enviados pelo formulário de cadastro.
             $nome  = trim($_POST['nome']  ?? '');
             $email = trim($_POST['email'] ?? '');
             $senha = (string)($_POST['senha'] ?? '');
@@ -37,52 +39,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors[] = 'A senha deve ter pelo menos 6 caracteres.';
             }
 
-            // Verifica e-mail duplicado
+            // Se não houver erros de validação até agora, verifica se o e-mail já existe.
             if (!$errors) {
+                // Procura por um usuário com o mesmo e-mail no banco.
                 $existing = $userRepo->findOneBy(['email' => $email]);
+                // Se encontrar, adiciona um erro.
                 if ($existing) {
                     $errors[] = 'Já existe um usuário cadastrado com este e-mail.';
                 }
             }
 
+            // Se, após todas as verificações, não houver erros.
             if (!$errors) {
-                $user = new User($nome, $email, $senha); // hash dentro do construtor
+                // Cria um novo objeto User (a senha é criptografada no construtor).
+                $user = new User($nome, $email, $senha);
                 $user->save();
 
-                // Autologin simples
+                // Inicia a sessão para o novo usuário (autologin).
                 $_SESSION['user_id'] = $user->getId();
                 $_SESSION['user_nome'] = $user->getNome();
-                  $_SESSION['user_role'] = strtolower($user->getNivelAcesso());
+                $_SESSION['user_role'] = strtolower($user->getNivelAcesso());
+                // Redireciona o usuário para a página inicial.
                 header('Location: index.php');
                 exit;
             }
 
+            // Se houveram erros, garante que a view de signup seja exibida novamente.
             $view = 'signup';
         }
 
+
+
+        // Se a ação for 'login' (entrar na conta).
         if ($action === 'login') {
+            // Pega e limpa os dados enviados pelo formulário de login.
             $email = trim($_POST['email'] ?? '');
             $senha = (string)($_POST['senha'] ?? '');
 
             if ($email === '' || $senha === '') {
                 $errors[] = 'Informe e-mail e senha.';
+
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors[] = 'Informe um e-mail válido.';
             } else {
+                // Busca o usuário pelo e-mail no banco de dados.
                 $user = $userRepo->findOneBy(['email' => $email]);
+                // Se o usuário não for encontrado OU a senha estiver incorreta...
                 if (!$user || !$user->verificaSenha($senha)) {
                     $errors[] = 'E-mail ou senha inválidos.';
                 } else {
+                    // Se o login for bem-sucedido, armazena os dados do usuário na sessão.
                     $_SESSION['user_id'] = $user->getId();
                     $_SESSION['user_nome'] = $user->getNome();
-                      $_SESSION['user_role'] = strtolower($user->getNivelAcesso());
+                    $_SESSION['user_role'] = strtolower($user->getNivelAcesso());
                     header('Location: index.php');
                     exit;
                 }
             }
 
+            // Se houver erros, garante que a view de login seja exibida novamente (mvc).
             $view = 'login';
         }
+    // Captura qualquer erro geral que possa ocorrer durante o processo.
     } catch (Throwable $e) {
         $errors[] = 'Erro ao processar a solicitação.';
     }
@@ -111,12 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h1 class="title">Bem-vindo</h1>
       <p class="subtitle">Acesse sua conta ou crie uma nova para avaliar filmes.</p>
 
+      <!-- Abas para alternar entre login e cadastro -->
       <div class="segmented" role="tablist">
         <a class="seg<?= $view === 'login' ? ' active' : '' ?>" href="?view=login" role="tab" aria-selected="<?= $view === 'login' ? 'true' : 'false' ?>">Entrar</a>
         <a class="seg<?= $view === 'signup' ? ' active' : '' ?>" href="?view=signup" role="tab" aria-selected="<?= $view === 'signup' ? 'true' : 'false' ?>">Criar conta</a>
       </div>
 
-      <?php if ($errors): ?>
+      <?php if ($errors): // printa o erro ?>
         <div class="card" style="background:hsl(var(--card)); margin:0 0 12px; border:1px solid hsl(0 72% 50% / .35);">
           <ul style="margin:8px 12px; padding-left: 18px; color:hsl(0 72% 70%);">
             <?php foreach ($errors as $err): ?>
@@ -148,8 +167,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a class="btn btn-ghost" href="?view=login">Já tenho conta</a>
             <button class="btn btn-primary" type="submit">Criar conta</button>
           </div>
-          <p class="note">Sua senha será protegida com hash forte (password_hash).</p>
         </form>
+
       <?php else: ?>
     <form method="post" autocomplete="off" novalidate>
           <input type="hidden" name="action" value="login" />
@@ -167,11 +186,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a class="btn btn-ghost" href="?view=signup">Criar conta</a>
             <button class="btn btn-primary" type="submit">Entrar</button>
           </div>
-          <p class="note">Usamos verificação segura de senha (password_verify).</p>
         </form>
       <?php endif; ?>
     </div>
   </main>
+
+
+
 
   <script>
   // Script para mensagens de validação customizadas (substitui tooltips nativos)
@@ -203,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     document.querySelectorAll('.auth-card form').forEach(form => {
-      // intercept submit
+      //  Verifica todos os campos quando o usuário clica em "Entrar" ou "Criar conta".
       form.addEventListener('submit', function(e){
         let hasError = false;
         const fields = form.querySelectorAll('input[required], input[minlength]');
@@ -211,11 +232,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           const msg = validateField(f);
           if (msg){ setError(f, msg); hasError = true; }
         });
+        //  Se encontrar algum erro, impede o envio do formulário para o servidor.
         if (hasError){ e.preventDefault(); return false; }
         return true;
       });
 
-      // live validation
+      //  Valida o campo em tempo real, assim que o usuário termina de digitar.
       form.querySelectorAll('input').forEach(inp => {
         inp.addEventListener('input', () => { clearError(inp); });
         inp.addEventListener('blur', () => {
